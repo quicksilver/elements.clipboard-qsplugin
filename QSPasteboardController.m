@@ -24,10 +24,6 @@
 	[QSPasteboardMonitor sharedInstance];
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:kCapturePasteboardHistory])
 		[QSPasteboardController sharedInstance];
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	if ([defaults boolForKey:@"QSPasteboardHistoryIsVisible"]) {
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showClipboardHidden:) name:@"QSApplicationDidFinishLaunchingNotification" object:NSApp];
-	} 	
 	NSImage *image = [[NSImage alloc] initByReferencingFile:
                   [[NSBundle bundleForClass:[QSPasteboardController class]]pathForImageResource:@"Clipboard"]];
 	[image shrinkToSize:QSSize16];
@@ -651,20 +647,6 @@ static int _draggedRow = -1;
 
 
 # pragma Window Handling
-
-- (void)windowDidResignKey:(NSNotification *)aNotification {
-	//	NSLog(@"visible");  
-}
-
-- (void)windowDidBecomeKey:(NSNotification *)aNotification {
-	//	NSLog(@"visible");
-  [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"QSPasteboardHistoryIsVisible"];  
-}
-- (void)windowWillClose:(NSNotification *)aNotification {
-	//NSLog(@"invisible");
-	
-  [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"QSPasteboardHistoryIsVisible"];  
-}
 
 - (void)adjustRowHeight {
 	float height = (int) (NSHeight([[pasteboardHistoryTable enclosingScrollView] frame])/10-2);
