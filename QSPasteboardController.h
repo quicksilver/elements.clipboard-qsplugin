@@ -16,6 +16,7 @@ typedef enum {
 
 
 @interface QSPasteboardController : NSWindowController {
+	// Array storing all the clipboard history
     NSMutableArray *pasteboardHistoryArray;
     NSMutableArray *pasteboardStoreArray;
     NSMutableArray *pasteboardCacheArray;
@@ -36,9 +37,12 @@ typedef enum {
 	BOOL cacheIsReversed;
 	int mode;
 }
-
+- (void)clearStore;
 - (void)copy:(id)sender;
 - (id)selectedObject;
+- (void)switchToMode:(int)newMode;
+- (void)setCacheIsReversed:(BOOL)reverse;
+- (void)adjustRowHeight;
 - (IBAction)clearHistory:(id)sender;
 - (IBAction)setMode:(id)sender;
 
