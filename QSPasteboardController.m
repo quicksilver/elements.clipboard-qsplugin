@@ -55,7 +55,7 @@
 }
 
 
-- (id)clearStore {
+- (void)clearStore {
 	[pasteboardStoreArray removeAllObjects];
 	for (int i = 0; i<10; i++) [pasteboardStoreArray addObject:[QSNullObject nullObject]];
 }
@@ -73,6 +73,7 @@
 		
 		// ***warning   * if pasteboard is empty, put last copyied item onto it
 		
+	  // Observer that's run when the pasteboard has changed (checked every 0.5s using checkPasteboard: in QSPasteboardMonitor.m)
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pasteboardChanged:) name:QSPasteboardDidChangeNotification object:nil];
 		
 		
@@ -216,21 +217,6 @@
   
   [pasteboardHistoryTable setDraggingDelegate:[self window]];
   
-	//    if (0) {
-	//        NSSize imageSize = [[NSImage imageNamed:@"PasteboardProxy"] size];
-	//        pasteboardProxyWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, imageSize.width, imageSize.height)
-	//                                                         styleMask:NSBorderlessWindowMask
-	//                                                           backing:NSBackingStoreBuffered defer:YES];
-	//        [pasteboardProxyWindow setMovableByWindowBackground:YES];
-	//        
-	//        [pasteboardProxyWindow setOpaque:NO];
-	//        [pasteboardProxyWindow setHasShadow:YES];
-	//        [pasteboardProxyWindow setBackgroundColor:[NSColor clearColor]];
-	//        [pasteboardProxyWindow setContentView:[[QSPasteboardProxyView alloc] initWithFrame:NSMakeRect(0, 0, imageSize.width, imageSize.height)]];
-	//        [pasteboardProxyWindow setLevel:NSFloatingWindowLevel];  
-	//        [pasteboardProxyWindow makeKeyAndOrderFront:self];
-	//    }
-  
   if ([pasteboardHistoryArray count]) {
 		NSPasteboard *pboard = [NSPasteboard generalPasteboard];
 		if (![[pboard types] count]) {
@@ -282,13 +268,14 @@
 	return standardPasteboardTypes;
 }
 
-
+// Called when an item should be added to the clipboard history
 - (void)pasteboardChanged:(NSNotification*)notif {
 	if (! [[NSUserDefaults standardUserDefaults] boolForKey:kCapturePasteboardHistory]) return;
 	
   int maxCount = [[NSUserDefaults standardUserDefaults] integerForKey:kCapturePasteboardHistoryCount];
-	
+	// run through the pasteboard history, removing unused (over the max count) objects
   while ([pasteboardHistoryArray count] >maxCount) [pasteboardHistoryArray removeLastObject];
+	// get a new object from the general (system-wide) pasteboard
   QSObject *newObject = [QSObject objectWithPasteboard:[notif object]];
   
   if (newObject) {
@@ -309,10 +296,11 @@
         name = [name substringToIndex:MAX_NAME_LENGTH];
       //name = [NSString stringWithFormat:@"%@.%@", name,dateString];
       
-      
+      // A string to the app support folder containing the clipboard data
       NSString *path = QSApplicationSupportSubPath(@"Data/Clipboard/", YES);
       path = [path stringByAppendingPathComponent:name];
       path = [path stringByAppendingPathExtension:@"qs"];
+	  // find a unique name (append 1, 2, 3 etc. to end of file name until unique name found)
       path = [path firstUnusedFilePath];
       
       [newObject writeToFile:path];
@@ -432,7 +420,7 @@
 
 
 
-#pragma Key  Handling
+#pragma mark Key Handling
 
 - (void)keyDown:(NSEvent *)theEvent {
   
@@ -541,7 +529,7 @@
 
 
 
-# pragma Table Handling
+# pragma mark Table Handling
 
 - (int) numberOfRowsInTableView:(NSTableView *)tableView {
   return [currentArray count];
@@ -646,7 +634,7 @@ static int _draggedRow = -1;
 }
 
 
-# pragma Window Handling
+# pragma mark Window Handling
 
 - (void)adjustRowHeight {
 	float height = (int) (NSHeight([[pasteboardHistoryTable enclosingScrollView] frame])/10-2);
