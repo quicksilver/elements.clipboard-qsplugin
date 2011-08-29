@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 44;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -211,8 +211,12 @@
 /* Begin PBXProject section */
 		0259C573FE90428111CA0C5A /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0410;
+			};
 			buildConfigurationList = 7F07AF72085E432C00E2AFC4 /* Build configuration list for PBXProject "ClipboardElement" */;
-			compatibilityVersion = "Xcode 3.0";
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -302,6 +306,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 14A8D33210CE6212003857E3 /* QSPlugIn_Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SYSTEM_APPS_DIR)/Quicksilver.app/Contents/Frameworks\"",
@@ -314,6 +319,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 14A8D33410CE6212003857E3 /* Release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 			};
 			name = Release;
 		};
@@ -321,6 +327,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 14A8D32E10CE6212003857E3 /* Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 			};
 			name = Debug;
 		};
@@ -328,6 +335,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 14A8D33010CE6212003857E3 /* QSPlugIn_Debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				OTHER_LDFLAGS = "-bundle";
 				PRODUCT_NAME = "Clipboard Module";
 			};
