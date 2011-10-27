@@ -14,10 +14,10 @@
 	<string>Clipboard Module</string>
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>2.0.0</string>
 	<key>CFBundleVersion</key>
-	<string>10C</string>
+	<string>FE</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.1.0</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2004, Blacktree, Inc.</string>
 	<key>NSPrincipalClass</key>
