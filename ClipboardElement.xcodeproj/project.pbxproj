@@ -212,14 +212,10 @@
 		0259C573FE90428111CA0C5A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0410;
+				LastUpgradeCheck = 0420;
 			};
 			buildConfigurationList = 7F07AF72085E432C00E2AFC4 /* Build configuration list for PBXProject "ClipboardElement" */;
-<<<<<<< HEAD
-			compatibilityVersion = "Xcode 3.0";
-=======
 			compatibilityVersion = "Xcode 3.2";
->>>>>>> 43973bbb7d653f69e0d2b1f7766403d0a645930f
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
