@@ -212,7 +212,7 @@
 		0259C573FE90428111CA0C5A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0410;
+				LastUpgradeCheck = 0420;
 			};
 			buildConfigurationList = 7F07AF72085E432C00E2AFC4 /* Build configuration list for PBXProject "ClipboardElement" */;
 			compatibilityVersion = "Xcode 3.2";

@@ -22,6 +22,11 @@
     return self;
 }
 
+- (void)dealloc {
+	[pollTimer release];
+	[super dealloc];
+}
+
 - (void)checkPasteboard:(NSTimer *)timer{
     int changeCount=[[NSPasteboard generalPasteboard]changeCount];
     if (changeCount==lastChangeCount) return;

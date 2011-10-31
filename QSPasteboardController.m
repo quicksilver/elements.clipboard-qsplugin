@@ -24,10 +24,6 @@
 	[QSPasteboardMonitor sharedInstance];
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:kCapturePasteboardHistory])
 		[QSPasteboardController sharedInstance];
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	if ([defaults boolForKey:@"QSPasteboardHistoryIsVisible"]) {
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showClipboardHidden:) name:@"QSApplicationDidFinishLaunchingNotification" object:NSApp];
-	} 	
 	NSImage *image = [[NSImage alloc] initByReferencingFile:
                   [[NSBundle bundleForClass:[QSPasteboardController class]]pathForImageResource:@"Clipboard"]];
 	[image shrinkToSize:QSSize16];
@@ -59,7 +55,7 @@
 }
 
 
-- (id)clearStore {
+- (void)clearStore {
 	[pasteboardStoreArray removeAllObjects];
 	for (int i = 0; i<10; i++) [pasteboardStoreArray addObject:[QSNullObject nullObject]];
 }
@@ -77,6 +73,7 @@
 		
 		// ***warning   * if pasteboard is empty, put last copyied item onto it
 		
+	  // Observer that's run when the pasteboard has changed (checked every 0.5s using checkPasteboard: in QSPasteboardMonitor.m)
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pasteboardChanged:) name:QSPasteboardDidChangeNotification object:nil];
 		
 		
@@ -220,21 +217,6 @@
   
   [pasteboardHistoryTable setDraggingDelegate:[self window]];
   
-	//    if (0) {
-	//        NSSize imageSize = [[NSImage imageNamed:@"PasteboardProxy"] size];
-	//        pasteboardProxyWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, imageSize.width, imageSize.height)
-	//                                                         styleMask:NSBorderlessWindowMask
-	//                                                           backing:NSBackingStoreBuffered defer:YES];
-	//        [pasteboardProxyWindow setMovableByWindowBackground:YES];
-	//        
-	//        [pasteboardProxyWindow setOpaque:NO];
-	//        [pasteboardProxyWindow setHasShadow:YES];
-	//        [pasteboardProxyWindow setBackgroundColor:[NSColor clearColor]];
-	//        [pasteboardProxyWindow setContentView:[[QSPasteboardProxyView alloc] initWithFrame:NSMakeRect(0, 0, imageSize.width, imageSize.height)]];
-	//        [pasteboardProxyWindow setLevel:NSFloatingWindowLevel];  
-	//        [pasteboardProxyWindow makeKeyAndOrderFront:self];
-	//    }
-  
   if ([pasteboardHistoryArray count]) {
 		NSPasteboard *pboard = [NSPasteboard generalPasteboard];
 		if (![[pboard types] count]) {
@@ -286,43 +268,56 @@
 	return standardPasteboardTypes;
 }
 
-
+// Called when an item should be added to the clipboard history
 - (void)pasteboardChanged:(NSNotification*)notif {
 	if (! [[NSUserDefaults standardUserDefaults] boolForKey:kCapturePasteboardHistory]) return;
 	
   int maxCount = [[NSUserDefaults standardUserDefaults] integerForKey:kCapturePasteboardHistoryCount];
+	// run through the pasteboard history, removing unused (over the max count) objects
+	while ([pasteboardHistoryArray count] >maxCount) [pasteboardHistoryArray removeLastObject];
+	// get a new object from the general (system-wide) pasteboard
+	QSObject *newObject = [QSObject objectWithPasteboard:[notif object]];
 	
-  while ([pasteboardHistoryArray count] >maxCount) [pasteboardHistoryArray removeLastObject];
-  QSObject *newObject = [QSObject objectWithPasteboard:[notif object]];
-  
-  if (newObject) {
-    
-    BOOL recievingSelection = [[self selectedObject] isEqual:newObject];
+	if (newObject) {
+		BOOL keepOldObject = FALSE;
+		// check the string value of the objects to compare (the object's aren't necessarily the same if one has more pasteboard types
+		// (e.g. RTF data) than the other)
+		// receiving selection decides whether an existing object on the clipboard should be 'moved up' to the 0th position
+		BOOL recievingSelection = [[[self selectedObject] stringValue] isEqualToString:[newObject stringValue]];
 		[[newObject retain] autorelease];
-    if ([pasteboardHistoryArray containsObject:newObject]) {
-    [pasteboardHistoryArray removeObject:newObject];
-    } else {
-      
-      NSDate *date = [newObject objectForMeta:kQSObjectCreationDate];
-      NSString *dateString = [date descriptionWithCalendarFormat:@"%y%m%d.%H%M%S.%F"
-                                                        timeZone:[NSTimeZone localTimeZone]
-                                                          locale:nil];
+		for(QSObject *pasteboardObject in pasteboardHistoryArray) {
+			// if the object (string) is already on the pasteboard
+			if([[pasteboardObject stringValue] isEqualToString:[newObject stringValue]]) {
+				// Fix the object with the most types (each type is stored in the dataDictionary)
+				if([[pasteboardObject dataDictionary] count] > [[newObject dataDictionary] count]) {
+					//Keep the old object, it's better
+					[newObject setDataDictionary:[[pasteboardObject dataDictionary] mutableCopy]];
+					keepOldObject = TRUE;
+				}
+				[pasteboardHistoryArray removeObject:pasteboardObject];
+				break;
+			}
+		}
+		// If the object's entirely new to the clipboard, we need to add some info to it
+		if(!keepOldObject) {      
+
 #define MAX_NAME_LENGTH 100
-      NSString *name = [newObject name];
-      if ([name length] > MAX_NAME_LENGTH)
-        name = [name substringToIndex:MAX_NAME_LENGTH];
-      //name = [NSString stringWithFormat:@"%@.%@", name,dateString];
-      
-      
-      NSString *path = QSApplicationSupportSubPath(@"Data/Clipboard/", YES);
-      path = [path stringByAppendingPathComponent:name];
-      path = [path stringByAppendingPathExtension:@"qs"];
-      path = [path firstUnusedFilePath];
-      
-      [newObject writeToFile:path];
-    }
-    
-    [pasteboardHistoryArray insertObject:newObject atIndex:0];
+			NSString *name = [newObject name];
+			if ([name length] > MAX_NAME_LENGTH)
+				name = [name substringToIndex:MAX_NAME_LENGTH];
+			//name = [NSString stringWithFormat:@"%@.%@", name,dateString];
+			
+			// A string to the app support folder containing the clipboard data
+			NSString *path = QSApplicationSupportSubPath(@"Data/Clipboard/", YES);
+			path = [path stringByAppendingPathComponent:name];
+			path = [path stringByAppendingPathExtension:@"qs"];
+			// find a unique name (append 1, 2, 3 etc. to end of file name until unique name found)
+			path = [path firstUnusedFilePath];
+			
+			[newObject writeToFile:path];
+		}
+		
+		[pasteboardHistoryArray insertObject:newObject atIndex:0];
 		
 		if (!supressCapture) {
 			switch (mode) {
@@ -341,12 +336,12 @@
 		[pasteboardHistoryTable reloadData];
     
     if (recievingSelection) {
-      [pasteboardHistoryTable selectRow:0 byExtendingSelection:NO];
+      [pasteboardHistoryTable selectRowIndexes:0 byExtendingSelection:NO];
     } else {
-      int row = [pasteboardHistoryTable selectedRow];
+      NSUInteger row = [pasteboardHistoryTable selectedRow];
       if (row>0) {
         if (row+1<[pasteboardHistoryArray count])
-          [pasteboardHistoryTable selectRow:row+1 byExtendingSelection:NO];
+			[pasteboardHistoryTable selectRowIndexes:[NSIndexSet indexSetWithIndex:row+1] byExtendingSelection:NO];
         else 
           [pasteboardHistoryTable deselectRow:row];
       }
@@ -436,21 +431,22 @@
 
 
 
-#pragma Key  Handling
+#pragma mark Key Handling
 
 - (void)keyDown:(NSEvent *)theEvent {
   
 	//  NSLog(@"%@", theEvent);
   if ([[NSArray arrayWithObjects:@"0", @"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", nil] containsObject:
        [theEvent charactersIgnoringModifiers]]) {
-    int row = [[theEvent charactersIgnoringModifiers] intValue];
+	  NSUInteger row = [[theEvent charactersIgnoringModifiers] integerValue];
+    NSIndexSet *rowSet = [NSIndexSet indexSetWithIndex:row];
 		
 		if (mode == QSPasteboardStoreMode && [theEvent modifierFlags] & NSAlternateKeyMask) {
 			[pasteboardStoreArray replaceObjectAtIndex:row withObject:[QSObject objectWithPasteboard:[NSPasteboard generalPasteboard]]];
-			[pasteboardHistoryTable selectRow:row byExtendingSelection:NO];
+			[pasteboardHistoryTable selectRowIndexes:rowSet byExtendingSelection:NO];
 		} else {
 			
-			[pasteboardHistoryTable selectRow:row byExtendingSelection:NO];
+			[pasteboardHistoryTable selectRowIndexes:rowSet byExtendingSelection:NO];
 			[self pasteItem:self];
 			[pasteboardHistoryTable reloadData];
 		}
@@ -476,7 +472,7 @@
 
 
 
-# pragma Menu Handling
+# pragma mark Menu Handling
 
 - (IBAction)toggleAdjustRows:(id)sender {
 	adjustRowsToFit = !adjustRowsToFit; 	
@@ -545,7 +541,7 @@
 
 
 
-# pragma Table Handling
+# pragma mark Table Handling
 
 - (int) numberOfRowsInTableView:(NSTableView *)tableView {
   return [currentArray count];
@@ -650,21 +646,7 @@ static int _draggedRow = -1;
 }
 
 
-# pragma Window Handling
-
-- (void)windowDidResignKey:(NSNotification *)aNotification {
-	//	NSLog(@"visible");  
-}
-
-- (void)windowDidBecomeKey:(NSNotification *)aNotification {
-	//	NSLog(@"visible");
-  [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"QSPasteboardHistoryIsVisible"];  
-}
-- (void)windowWillClose:(NSNotification *)aNotification {
-	//NSLog(@"invisible");
-	
-  [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"QSPasteboardHistoryIsVisible"];  
-}
+# pragma mark Window Handling
 
 - (void)adjustRowHeight {
 	float height = (int) (NSHeight([[pasteboardHistoryTable enclosingScrollView] frame])/10-2);
