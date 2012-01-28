@@ -22,8 +22,15 @@
 	[modMenuItem setTarget:self];
 	
 	[QSPasteboardMonitor sharedInstance];
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:kCapturePasteboardHistory])
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+	if ([defaults boolForKey:kCapturePasteboardHistory])
 		[QSPasteboardController sharedInstance];
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self selector:@selector(saveVisibilityState:) name:@"QSEventNotification" object:nil];
+    if([defaults boolForKey:@"QSPasteboardHistoryIsVisible"]){
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showClipboardHidden:) name:@"QSApplicationDidFinishLaunchingNotification" object:nil];
+    }  
+    
 	NSImage *image = [[NSImage alloc] initByReferencingFile:
                   [[NSBundle bundleForClass:[QSPasteboardController class]]pathForImageResource:@"Clipboard"]];
 	[image shrinkToSize:QSSize16];
@@ -48,6 +55,17 @@
 	
 }
 
+// saves the state of the shelf window when Quicksivler goes to quit (used on next QS launch - see +loadPlugIn)
++(void)saveVisibilityState:(NSNotification *)notif {
+    if ([[notif object] isEqualToString:@"QSQuicksilverWillQuitEvent"]) {
+        BOOL visible = ![(QSDockingWindow *)[[self sharedInstance] window] hidden];
+        if (!visible) {
+            visible = [(QSDockingWindow *)[[self sharedInstance] window] canFade];
+        }
+        [[NSUserDefaults standardUserDefaults] setBool:visible forKey:@"QSPasteboardHistoryIsVisible"];
+    }
+}
+
 + (id)sharedInstance {
   static id _sharedInstance;
   if (!_sharedInstance) _sharedInstance = [[[self class] allocWithZone:[self zone]] init];
@@ -60,7 +78,7 @@
 	for (int i = 0; i<10; i++) [pasteboardStoreArray addObject:[QSNullObject nullObject]];
 }
 - (id)init {
-  if (self = [super initWithWindowNibName:@"Pasteboard" owner:self]) {
+    if (self = [super initWithWindowNibName:@"Pasteboard" owner:self]) {
 		
 		pasteboardHistoryArray = nil;
 		pasteboardHistoryArray = [[QSLibrarian sharedInstance] shelfNamed:@"QSPasteboardHistory"]; //[[NSMutableArray alloc] initWithCapacity:1];
@@ -73,7 +91,6 @@
 		
 		// ***warning   * if pasteboard is empty, put last copyied item onto it
 		
-	  // Observer that's run when the pasteboard has changed (checked every 0.5s using checkPasteboard: in QSPasteboardMonitor.m)
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pasteboardChanged:) name:QSPasteboardDidChangeNotification object:nil];
 		
 		
@@ -81,27 +98,27 @@
 			QSHotKeyEvent *hotKey;
 			
 			hotKey = [QSHotKeyEvent getHotKeyForKeyCode:37 character:@"L"
-                                            modifierFlags:NSCommandKeyMask | NSControlKeyMask];
+                                          modifierFlags:NSCommandKeyMask | NSControlKeyMask];
 			[hotKey setTarget:self selector:@selector(showHistory:)];
 			[hotKey setEnabled:YES];
 			
 			hotKey = [QSHotKeyEvent getHotKeyForKeyCode:37 character:@"L"
-                                            modifierFlags:NSCommandKeyMask | NSShiftKeyMask | NSAlternateKeyMask];
+                                          modifierFlags:NSCommandKeyMask | NSShiftKeyMask | NSAlternateKeyMask];
 			[hotKey setTarget:self selector:@selector(showStore:)];
 			[hotKey setEnabled:YES];
 			
 			hotKey = [QSHotKeyEvent getHotKeyForKeyCode:37 character:@"L"
-                                            modifierFlags:NSCommandKeyMask | NSControlKeyMask | NSAlternateKeyMask];
+                                          modifierFlags:NSCommandKeyMask | NSControlKeyMask | NSAlternateKeyMask];
 			[hotKey setTarget:self selector:@selector(showQueue:)];
 			[hotKey setEnabled:YES];
 			
 			hotKey = [QSHotKeyEvent getHotKeyForKeyCode:37 character:@"L"
-                                            modifierFlags:NSCommandKeyMask | NSControlKeyMask | NSShiftKeyMask];
+                                          modifierFlags:NSCommandKeyMask | NSControlKeyMask | NSShiftKeyMask];
 			[hotKey setTarget:self selector:@selector(showStack:)];
 			[hotKey setEnabled:YES];
 			
 			hotKey = [QSHotKeyEvent getHotKeyForKeyCode:9 character:@"V"
-                                            modifierFlags:NSCommandKeyMask | NSControlKeyMask];
+                                          modifierFlags:NSCommandKeyMask | NSControlKeyMask];
 			[hotKey setTarget:self selector:@selector(qsPaste:)];
 			[hotKey setEnabled:YES];
 		}
