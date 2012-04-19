@@ -27,7 +27,7 @@
 		[QSPasteboardController sharedInstance];
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self selector:@selector(saveVisibilityState:) name:@"QSEventNotification" object:nil];
-    if([defaults boolForKey:@"QSPasteboardHistoryIsVisible"] && ![(QSDockingWindow *)[[self sharedInstance] window] canFade]){
+    if([defaults boolForKey:@"QSPasteboardHistoryIsVisible"] || [(QSDockingWindow *)[[self sharedInstance] window] canFade]){
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showClipboardHidden:) name:@"QSApplicationDidFinishLaunchingNotification" object:nil];
     }  
     
