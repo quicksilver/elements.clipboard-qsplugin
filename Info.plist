@@ -461,5 +461,10 @@
 			<string>Clipboard.icns</string>
 		</dict>
 	</dict>
+	<key>QSRequirements</key>
+	<dict>
+		<key>version</key>
+		<string>3926</string>
+	</dict>
 </dict>
 </plist>

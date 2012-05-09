@@ -47,7 +47,7 @@
 + (void)showClipboardHidden:(id)sender
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	if ([defaults boolForKey:@"QSPasteboardHistoryIsVisible"] || [(QSDockingWindow *)[[self sharedInstance] window] canFade]) {
+	if ([defaults boolForKey:@"QSPasteboardHistoryIsVisible"] || [(QSDockingWindow *)[[self sharedInstance] window] isDocked]) {
 		[(QSDockingWindow *)[[self sharedInstance] window] orderFrontHidden:sender];
 	}
 }
@@ -429,7 +429,7 @@
 }
 - (IBAction)hideWindow:(id)sender {
 	[[self window] saveFrame];
-  if (![(QSDockingWindow *)[self window] canFade] && [[NSUserDefaults standardUserDefaults] boolForKey:@"QSPasteboardController HideAfterPasting"]) {
+  if (![(QSDockingWindow *)[self window] isDocked] && [[NSUserDefaults standardUserDefaults] boolForKey:@"QSPasteboardController HideAfterPasting"]) {
 		[[self window] orderOut:self];
   } else {
     [(QSDockingWindow *)[self window] hide:self];
