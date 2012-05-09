@@ -27,9 +27,7 @@
 		[QSPasteboardController sharedInstance];
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self selector:@selector(saveVisibilityState:) name:@"QSEventNotification" object:nil];
-    if([defaults boolForKey:@"QSPasteboardHistoryIsVisible"] || [(QSDockingWindow *)[[self sharedInstance] window] canFade]){
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showClipboardHidden:) name:@"QSApplicationDidFinishLaunchingNotification" object:nil];
-    }  
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showClipboardHidden:) name:@"QSApplicationDidFinishLaunchingNotification" object:nil];
     
 	NSImage *image = [[NSImage alloc] initByReferencingFile:
                   [[NSBundle bundleForClass:[QSPasteboardController class]]pathForImageResource:@"Clipboard"]];
@@ -46,8 +44,12 @@
 	return YES;
 }
 
-+ (void)showClipboardHidden:(id)sender {
-	[(QSDockingWindow *)[[self sharedInstance] window] orderFrontHidden:sender];
++ (void)showClipboardHidden:(id)sender
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if ([defaults boolForKey:@"QSPasteboardHistoryIsVisible"] || [(QSDockingWindow *)[[self sharedInstance] window] isDocked]) {
+		[(QSDockingWindow *)[[self sharedInstance] window] orderFrontHidden:sender];
+	}
 }
 
 + (void)showClipboard:(id)sender {
@@ -427,7 +429,7 @@
 }
 - (IBAction)hideWindow:(id)sender {
 	[[self window] saveFrame];
-  if (![(QSDockingWindow *)[self window] canFade] && [[NSUserDefaults standardUserDefaults] boolForKey:@"QSPasteboardController HideAfterPasting"]) {
+  if (![(QSDockingWindow *)[self window] isDocked] && [[NSUserDefaults standardUserDefaults] boolForKey:@"QSPasteboardController HideAfterPasting"]) {
 		[[self window] orderOut:self];
   } else {
     [(QSDockingWindow *)[self window] hide:self];
