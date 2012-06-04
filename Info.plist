@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
+	<key>CFBundleDisplayName</key>
+	<string>Clipboard</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -12,14 +14,12 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>Clipboard Module</string>
-	<key>CFBundleDisplayName</key>
-	<string>Clipboard</string>
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.1.2</string>
 	<key>CFBundleVersion</key>
-	<string>101</string>
+	<string>107</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2004, Blacktree, Inc.</string>
 	<key>NSPrincipalClass</key>
@@ -399,7 +399,7 @@
 			<key>QSPasteboardPrefPane</key>
 			<dict>
 				<key>class</key>
-				<string>QSPreferencePane</string>
+				<string>QSPasteboardPrefPane</string>
 				<key>description</key>
 				<string>Clipboard History Options</string>
 				<key>icon</key>
@@ -451,6 +451,11 @@
 			<string>QSPasteboardController</string>
 		</dict>
 	</dict>
+	<key>QSRequirements</key>
+	<dict>
+		<key>version</key>
+		<string>3926</string>
+	</dict>
 	<key>QSResourceAdditions</key>
 	<dict>
 		<key>Clipboard</key>
@@ -460,11 +465,6 @@
 			<key>resource</key>
 			<string>Clipboard.icns</string>
 		</dict>
-	</dict>
-	<key>QSRequirements</key>
-	<dict>
-		<key>version</key>
-		<string>3926</string>
 	</dict>
 </dict>
 </plist>
