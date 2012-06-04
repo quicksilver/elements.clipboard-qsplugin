@@ -1,7 +1,6 @@
 
 
 #import "QSPasteboardObjectView.h"
-#import <QSCore/QSCore.h>
 
 @implementation QSPasteboardObjectView
 

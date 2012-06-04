@@ -91,7 +91,7 @@
 
 
 
-- (unsigned int)draggingSourceOperationMaskForLocal:(BOOL)isLocal{
+- (NSUInteger)draggingSourceOperationMaskForLocal:(BOOL)isLocal{
         return NSDragOperationEvery;
 }
 

@@ -35,9 +35,7 @@
     }
     
     if ([self objectValue]){
-        int rank=[[self objectValue]intValue];
-        
-        
+        NSUInteger rank=[[self objectValue] unsignedIntegerValue];
         
         NSDictionary *attributes=[NSDictionary dictionaryWithObjectsAndKeys:[self textColor],NSForegroundColorAttributeName,[self font], NSFontAttributeName,nil];
         NSString *string=[NSString stringWithFormat:@"%d",rank];
