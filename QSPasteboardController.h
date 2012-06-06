@@ -1,5 +1,4 @@
 
-
 #import <Foundation/Foundation.h>
 typedef enum {
 	QSPasteboardHistoryMode = 1, // Global pasteboard history
@@ -35,12 +34,12 @@ typedef enum {
     BOOL supressCapture;
     BOOL adjustRowsToFit;
 	BOOL cacheIsReversed;
-	int mode;
+	NSUInteger mode;
 }
 - (void)clearStore;
 - (void)copy:(id)sender;
 - (id)selectedObject;
-- (void)switchToMode:(int)newMode;
+- (void)switchToMode:(NSUInteger)newMode;
 - (void)setCacheIsReversed:(BOOL)reverse;
 - (void)adjustRowHeight;
 - (IBAction)clearHistory:(id)sender;
