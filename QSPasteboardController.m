@@ -337,25 +337,26 @@
 				break;
 			}
 		}
+#warning Fixme: writing pasteboard files to disk
+        // ******* Commented out code for writing clipboard data to file. Needs to be implemented properly at some point
 		// If the object's entirely new to the clipboard, we need to add some info to it
-		if(!keepOldObject) {      
-            
-#define MAX_NAME_LENGTH 100
-			NSString *name = [newObject name];
-			if ([name length] > MAX_NAME_LENGTH)
-				name = [name substringToIndex:MAX_NAME_LENGTH];
-			//name = [NSString stringWithFormat:@"%@.%@", name,dateString];
-			
-			// A string to the app support folder containing the clipboard data
-			NSString *path = QSApplicationSupportSubPath(@"Data/Clipboard/", YES);
-			path = [path stringByAppendingPathComponent:name];
-			path = [path stringByAppendingPathExtension:@"qs"];
-			// find a unique name (append 1, 2, 3 etc. to end of file name until unique name found)
-			path = [path firstUnusedFilePath];
-			
-			[newObject writeToFile:path];
-		}
-		
+//		if(!keepOldObject) {      
+//            
+//#define MAX_NAME_LENGTH 100
+//			NSString *name = [newObject name];
+//			if ([name length] > MAX_NAME_LENGTH)
+//				name = [name substringToIndex:MAX_NAME_LENGTH];
+//			//name = [NSString stringWithFormat:@"%@.%@", name,dateString];
+//			
+//			// A string to the app support folder containing the clipboard data
+//			NSString *path = QSApplicationSupportSubPath(@"Data/Clipboard/", YES);
+//			path = [path stringByAppendingPathComponent:name];
+//			path = [path stringByAppendingPathExtension:@"qs"];
+//			// find a unique name (append 1, 2, 3 etc. to end of file name until unique name found)
+//			path = [path firstUnusedFilePath];
+//			
+//			[newObject writeToFile:path];
+//		}
 		[pasteboardHistoryArray insertObject:newObject atIndex:0];
 		
 		if (!supressCapture) {
