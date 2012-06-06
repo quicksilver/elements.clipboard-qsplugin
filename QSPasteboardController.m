@@ -310,14 +310,14 @@
 	while ([pasteboardHistoryArray count] >maxCount) [pasteboardHistoryArray removeLastObject];
 	// get a new object from the general (system-wide) pasteboard
 	QSObject *newObject = [QSObject objectWithPasteboard:[notif object]];
-    
-    // some apps (e.g. 1Password and its browser extensions) copy a blank string to the clipboard to clear it.
-    // Quicksilver should take this into consideration and clear the 
-    if (![[newObject stringValue] length] && [pasteboardHistoryArray count]) {
-        [pasteboardHistoryArray removeObjectAtIndex:0];
-    }
 	
 	if (newObject) {
+        // some apps (e.g. 1Password and its browser extensions) copy a blank string to the clipboard to clear it.
+        // Quicksilver should take this into consideration and clear the 
+        if ([newObject objectForType:QSTextType] && ![[newObject objectForType:QSTextType] length]) {
+            [pasteboardHistoryArray removeObjectAtIndex:0];
+        }
+        
 		BOOL keepOldObject = FALSE;
 		// check the string value of the objects to compare (the object's aren't necessarily the same if one has more pasteboard types
 		// (e.g. RTF data) than the other)
