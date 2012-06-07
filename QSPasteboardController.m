@@ -316,6 +316,7 @@
         // Quicksilver should take this into consideration and clear the 
         if ([newObject objectForType:QSTextType] && ![[newObject objectForType:QSTextType] length]) {
             [pasteboardHistoryArray removeObjectAtIndex:0];
+            return;
         }
         
 		BOOL keepOldObject = FALSE;
