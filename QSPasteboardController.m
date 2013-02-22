@@ -24,7 +24,7 @@
     
     // set up the default apps to ignore clipboard content from: 1Password, Keychain and Wallet
     if (![defaults objectForKey:@"clipboardIgnoreApps"]) {
-        NSArray *apps = [NSArray arrayWithObjects:@"com.agilebits.onepassword-osx",@"com.acrylic.wallet",@"com.apple.keychainaccess",nil];
+        NSArray *apps = [NSArray arrayWithObjects:@"com.agilebits.onepassword-osx",@"com.acrylic.wallet",@"com.apple.keychainaccess",@"com.microsoft.RDC",nil];
         NSMutableArray *tempArray = [NSMutableArray arrayWithCapacity:2];
         for (NSString *app in apps) {
             if ([[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:app] ) {
