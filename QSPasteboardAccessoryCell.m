@@ -38,7 +38,7 @@
         NSUInteger rank=[[self objectValue] unsignedIntegerValue];
         
         NSDictionary *attributes=[NSDictionary dictionaryWithObjectsAndKeys:[self textColor] ? [self textColor] : [NSColor textColor],NSForegroundColorAttributeName,[self font] ? [self font] : [NSFont systemFontOfSize:11], NSFontAttributeName,nil];
-        NSString *string=[NSString stringWithFormat:@"%d",rank];
+        NSString *string=[NSString stringWithFormat:@"%lu",(unsigned long)rank];
         
         NSSize textSize=[string sizeWithAttributes:attributes];
         

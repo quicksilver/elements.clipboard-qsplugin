@@ -307,7 +307,7 @@
     
     NSInteger maxCount = [[NSUserDefaults standardUserDefaults] integerForKey:kCapturePasteboardHistoryCount];
 	// run through the pasteboard history, removing unused (over the max count) objects
-	while ([pasteboardHistoryArray count] >maxCount) [pasteboardHistoryArray removeLastObject];
+	while ((NSInteger)[pasteboardHistoryArray count] >maxCount) [pasteboardHistoryArray removeLastObject];
 	// get a new object from the general (system-wide) pasteboard
 	QSObject *newObject = [QSObject objectWithPasteboard:[notif object]];
 	
@@ -564,7 +564,7 @@
 	//NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
 	if ([anItem action] == @selector(setMode:) ) {
-		[anItem setState:[anItem tag] == mode];
+		[anItem setState:[anItem tag] == (NSInteger)mode];
 		return YES;
 	}
 	if ([anItem action] == @selector(toggleAdjustRows:) ) {
@@ -585,10 +585,10 @@
 
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
     //  rowIndex++;
-	if (rowIndex>[currentArray count] -1 ) {
+	if (rowIndex>((NSInteger)[currentArray count] -1) ) {
 		return nil;
 	}
-    if ([[aTableColumn identifier] isEqualToString:@"object"] && [currentArray count] >rowIndex)
+    if ([[aTableColumn identifier] isEqualToString:@"object"] && (NSInteger)[currentArray count] >rowIndex)
         return [currentArray objectAtIndex:rowIndex];
     if ([[aTableColumn identifier] isEqualToString:@"sequence"]) {
         if (rowIndex<10) return [NSNumber numberWithInteger:rowIndex];
@@ -608,7 +608,7 @@
 }
 - (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
     //NSLog(@"setCell %d", rowIndex);
-    if (rowIndex >= [currentArray count] -1 ) return;
+    if (rowIndex >= (NSInteger)([currentArray count] -1) ) return;
     if ([[aTableColumn identifier] isEqualToString:@"object"]) {
         [aCell setRepresentedObject:[currentArray objectAtIndex:rowIndex]];
 		[aCell setState:NSOffState];
