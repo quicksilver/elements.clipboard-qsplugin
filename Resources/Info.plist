@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.1</string>
+	<string>1.2.2</string>
 	<key>CFBundleVersion</key>
-	<string>112</string>
+	<string>113</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2004, Blacktree, Inc.</string>
 	<key>NSPrincipalClass</key>
@@ -40,7 +40,7 @@
 		<key>extendedDescription</key>
 		<string>&lt;h3&gt;Clipboard Plugin&lt;/h3&gt;
 
-&lt;p&gt;The clipboard plugin gives Quicksilver the ability to keep a record of the Clipboard history, storing it in the 'Clipboard History' item in Quicksilver (type 'Clipboard History' into Quicksilver).&lt;br /&gt;
+&lt;p&gt;The clipboard plugin gives Quicksilver the ability to keep a record of the Clipboard history, storing it in the &apos;Clipboard History&apos; item in Quicksilver (type &apos;Clipboard History&apos; into Quicksilver).&lt;br /&gt;
 In addition to viewing the clipboard history in Quicksilver, the plugin adds a floating panel which displays all your history. To open the panel, open Quicksilver and press ⌘L.&lt;/p&gt;
 
 &lt;h3&gt;Preferences&lt;/h3&gt;
@@ -57,9 +57,9 @@ In addition to viewing the clipboard history in Quicksilver, the plugin adds a f
 
 &lt;h4&gt;Positioning the window&lt;/h4&gt;
 
-&lt;p&gt;The Clipboard Window is a floating panel specific to Quicksilver, giving it several useful features for positioning. Positioning the window on the side of the screen will cause it to become 'docked' on the screen edge. It will then slide into the screen edge. Hover over the edge of the screen to make the window reappear.&lt;/p&gt;
+&lt;p&gt;The Clipboard Window is a floating panel specific to Quicksilver, giving it several useful features for positioning. Positioning the window on the side of the screen will cause it to become &apos;docked&apos; on the screen edge. It will then slide into the screen edge. Hover over the edge of the screen to make the window reappear.&lt;/p&gt;
 
-&lt;p&gt;The position of windows is remembered across restarts of Quicksilver, and you can have the window disappear after pasting by enabling the 'Hide after pasting' option in the preferences (see above).&lt;br /&gt;
+&lt;p&gt;The position of windows is remembered across restarts of Quicksilver, and you can have the window disappear after pasting by enabling the &apos;Hide after pasting&apos; option in the preferences (see above).&lt;br /&gt;
 &lt;p&gt;&lt;strong&gt;Tip:&lt;/strong&gt; You can quickly open and close the Clipboard Window by creating a trigger with the following options:&lt;br /&gt;
 &lt;code&gt;Clipboard History → Show&lt;/code&gt;&lt;br/&gt;
 If you would like to display the contents of your Clipboard history in Quicksilver (so that they are searchable) then set up the following trigger:&lt;br /&gt;
@@ -76,7 +76,7 @@ If you would like to display the contents of your Clipboard history in Quicksilv
 
 &lt;h4&gt;Clipboard Contents&lt;/h4&gt;
 
-&lt;p&gt;The 'Clipboard Contents' proxy object returns whatever you have currently copied to your clipboard. It is useful for setting up with triggers. An example could be:&lt;br/&gt;
+&lt;p&gt;The &apos;Clipboard Contents&apos; proxy object returns whatever you have currently copied to your clipboard. It is useful for setting up with triggers. An example could be:&lt;br/&gt;
 	&lt;code&gt;Clipboard Contents → Find With... → Google&lt;/code&gt;
 	&lt;/p&gt;</string>
 		<key>icon</key>
