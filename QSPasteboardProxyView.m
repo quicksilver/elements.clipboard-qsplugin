@@ -1,12 +1,7 @@
 
 
 #import "QSPasteboardProxyView.h"
-#import "QSObject.h"
-#import "QSObjectView.h"
 
-#import "QSObject_Pasteboard.h"
-
-#import "BLTRExtensions.h"
 @implementation QSPasteboardProxyView
 
 - (id)initWithFrame:(NSRect)frame {
