@@ -167,6 +167,8 @@
     //  [[NSWorkspace sharedWorkspace] activeApplication]];
     //[[NSApp keyWindow] orderOut:self];
     [(QSDockingWindow *)[self window] resignKeyWindowNow];
+    asPlainText = (([[NSApp currentEvent] modifierFlags] & NSDeviceIndependentModifierFlagsMask) == NSAlternateKeyMask);
+
     //[NSApp deactivate];
 	[self qsPaste:nil];
 	
@@ -480,7 +482,6 @@
 
 - (void)keyDown:(NSEvent *)theEvent {
     NSString *chars = [theEvent charactersIgnoringModifiers];
-    asPlainText = (([theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask) == NSAlternateKeyMask);
     if ([[NSArray arrayWithObjects:@"0", @"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", nil] containsObject:
          chars]) {
         NSInteger row = [chars integerValue];
