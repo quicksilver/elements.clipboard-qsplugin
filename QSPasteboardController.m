@@ -183,7 +183,7 @@
 	switch (mode) {
 		case QSPasteboardHistoryMode:
 		case QSPasteboardStoreMode:
-			[self copy:sender];
+			[self copyToClipboard:[self selectedObject]];
 			QSForcePaste();
 			break;
 		case QSPasteboardQueueMode:
@@ -192,7 +192,7 @@
 				
 				id object = (sender?[pasteboardCacheArray objectAtIndex:0] :[self selectedObject]);
 				supressCapture = YES;
-				[object putOnPasteboard:[NSPasteboard generalPasteboard] includeDataForTypes:nil];
+                [self copyToClipboard:object];
 				QSForcePaste();
 				if (sender) {
 					[pasteboardCacheArray removeObjectAtIndex:0];
@@ -466,8 +466,12 @@
     if (![currentArray count]) return nil;
     return [currentArray objectAtIndex:index];
 }
-- (void)copy:(id)sender {
-    [[self selectedObject] putOnPasteboard:[NSPasteboard generalPasteboard] includeDataForTypes:nil];
+- (void)copyToClipboard:(QSObject *)obj {
+    if (!asPlainText) {
+        [obj putOnPasteboard:[NSPasteboard generalPasteboard] includeDataForTypes:nil];
+    } else {
+        [obj putOnPasteboardAsPlainTextOnly:[NSPasteboard generalPasteboard]];
+    }
 }
 
 
@@ -475,10 +479,11 @@
 #pragma mark Key Handling
 
 - (void)keyDown:(NSEvent *)theEvent {
-    
+    NSString *chars = [theEvent charactersIgnoringModifiers];
+    asPlainText = (([theEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask) == NSAlternateKeyMask);
     if ([[NSArray arrayWithObjects:@"0", @"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", nil] containsObject:
-         [theEvent charactersIgnoringModifiers]]) {
-        NSInteger row = [[theEvent charactersIgnoringModifiers] integerValue];
+         chars]) {
+        NSInteger row = [chars integerValue];
         NSIndexSet *rowSet = [NSIndexSet indexSetWithIndex:row];
 		
 		if (mode == QSPasteboardStoreMode && [theEvent modifierFlags] & NSAlternateKeyMask) {
@@ -491,8 +496,11 @@
 			[pasteboardHistoryTable reloadData];
 		}
     }
-    else
+    else if ([chars characterAtIndex:0] == NSCarriageReturnCharacter || [chars characterAtIndex:0] == NSEnterCharacter) {
+        [self pasteItem:self];
+    } else {
         [self interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
+    }
     //   else [super keyDown:theEvent];
 }
 
