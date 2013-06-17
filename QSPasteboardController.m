@@ -167,6 +167,8 @@
     //  [[NSWorkspace sharedWorkspace] activeApplication]];
     //[[NSApp keyWindow] orderOut:self];
     [(QSDockingWindow *)[self window] resignKeyWindowNow];
+    asPlainText = (([[NSApp currentEvent] modifierFlags] & NSDeviceIndependentModifierFlagsMask) == NSAlternateKeyMask);
+
     //[NSApp deactivate];
 	[self qsPaste:nil];
 	
@@ -183,7 +185,7 @@
 	switch (mode) {
 		case QSPasteboardHistoryMode:
 		case QSPasteboardStoreMode:
-			[self copy:sender];
+			[self copyToClipboard:[self selectedObject]];
 			QSForcePaste();
 			break;
 		case QSPasteboardQueueMode:
@@ -192,7 +194,7 @@
 				
 				id object = (sender?[pasteboardCacheArray objectAtIndex:0] :[self selectedObject]);
 				supressCapture = YES;
-				[object putOnPasteboard:[NSPasteboard generalPasteboard] includeDataForTypes:nil];
+                [self copyToClipboard:object];
 				QSForcePaste();
 				if (sender) {
 					[pasteboardCacheArray removeObjectAtIndex:0];
@@ -466,8 +468,12 @@
     if (![currentArray count]) return nil;
     return [currentArray objectAtIndex:index];
 }
-- (void)copy:(id)sender {
-    [[self selectedObject] putOnPasteboard:[NSPasteboard generalPasteboard] includeDataForTypes:nil];
+- (void)copyToClipboard:(QSObject *)obj {
+    if (!asPlainText) {
+        [obj putOnPasteboard:[NSPasteboard generalPasteboard] includeDataForTypes:nil];
+    } else {
+        [obj putOnPasteboardAsPlainTextOnly:[NSPasteboard generalPasteboard]];
+    }
 }
 
 
@@ -475,10 +481,15 @@
 #pragma mark Key Handling
 
 - (void)keyDown:(NSEvent *)theEvent {
-    
-    if ([[NSArray arrayWithObjects:@"0", @"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", nil] containsObject:
-         [theEvent charactersIgnoringModifiers]]) {
-        NSInteger row = [[theEvent charactersIgnoringModifiers] integerValue];
+    NSString *chars = [theEvent charactersIgnoringModifiers];
+    static NSArray *keys = nil;
+    if (keys == nil) {
+        keys = [@[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9"] retain];
+    }
+    if ([keys containsObject:
+         chars]) {
+        // switch between human numbering and machine numbering (0/1 start)
+        NSInteger row = [chars integerValue] - 1;
         NSIndexSet *rowSet = [NSIndexSet indexSetWithIndex:row];
 		
 		if (mode == QSPasteboardStoreMode && [theEvent modifierFlags] & NSAlternateKeyMask) {
@@ -491,8 +502,11 @@
 			[pasteboardHistoryTable reloadData];
 		}
     }
-    else
+    else if ([chars characterAtIndex:0] == NSCarriageReturnCharacter || [chars characterAtIndex:0] == NSEnterCharacter) {
+        [self pasteItem:self];
+    } else {
         [self interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
+    }
     //   else [super keyDown:theEvent];
 }
 
@@ -591,7 +605,7 @@
     if ([[aTableColumn identifier] isEqualToString:@"object"] && (NSInteger)[currentArray count] >rowIndex)
         return [currentArray objectAtIndex:rowIndex];
     if ([[aTableColumn identifier] isEqualToString:@"sequence"]) {
-        if (rowIndex<10) return [NSNumber numberWithInteger:rowIndex];
+        if (rowIndex<9) return [NSNumber numberWithInteger:rowIndex+1];
     }
 	
 	//	if ([[aTableColumn identifier] isEqualToString:@"source"]) {

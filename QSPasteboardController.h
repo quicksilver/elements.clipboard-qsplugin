@@ -34,10 +34,11 @@ typedef enum {
     BOOL supressCapture;
     BOOL adjustRowsToFit;
 	BOOL cacheIsReversed;
+    BOOL asPlainText;
 	NSUInteger mode;
 }
 - (void)clearStore;
-- (void)copy:(id)sender;
+- (void)copyToClipboard:(QSObject*)obj;
 - (id)selectedObject;
 - (void)switchToMode:(NSUInteger)newMode;
 - (void)setCacheIsReversed:(BOOL)reverse;
