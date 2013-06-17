@@ -482,9 +482,14 @@
 
 - (void)keyDown:(NSEvent *)theEvent {
     NSString *chars = [theEvent charactersIgnoringModifiers];
-    if ([[NSArray arrayWithObjects:@"0", @"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", nil] containsObject:
+    static NSArray *keys = nil;
+    if (keys == nil) {
+        keys = [@[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9"] retain];
+    }
+    if ([keys containsObject:
          chars]) {
-        NSInteger row = [chars integerValue];
+        // switch between human numbering and machine numbering (0/1 start)
+        NSInteger row = [chars integerValue] - 1;
         NSIndexSet *rowSet = [NSIndexSet indexSetWithIndex:row];
 		
 		if (mode == QSPasteboardStoreMode && [theEvent modifierFlags] & NSAlternateKeyMask) {
@@ -600,7 +605,7 @@
     if ([[aTableColumn identifier] isEqualToString:@"object"] && (NSInteger)[currentArray count] >rowIndex)
         return [currentArray objectAtIndex:rowIndex];
     if ([[aTableColumn identifier] isEqualToString:@"sequence"]) {
-        if (rowIndex<10) return [NSNumber numberWithInteger:rowIndex];
+        if (rowIndex<9) return [NSNumber numberWithInteger:rowIndex+1];
     }
 	
 	//	if ([[aTableColumn identifier] isEqualToString:@"source"]) {
