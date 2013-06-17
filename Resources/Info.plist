@@ -19,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.3.0</string>
 	<key>CFBundleVersion</key>
-	<string>115</string>
+	<string>116</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2004, Blacktree, Inc.</string>
 	<key>NSPrincipalClass</key>
@@ -57,10 +57,10 @@ In addition to viewing the clipboard history in Quicksilver, the plugin adds a f
 If you would like to display the contents of your Clipboard history in Quicksilver (so that they are searchable) then set up the following trigger:&lt;br&gt;
 'Clipboard History ⇥ Show Contents'&lt;/p&gt;
 &lt;h4&gt;Pasting Items&lt;/h4&gt;
-&lt;p&gt;The Clipboard Window (activated by pressing ⌘L when Quicksilver is activated) displays a list of your Clipboard history. You can browse the history using the ↑↓ arrows, and paste text by pressing the Enter key (↩). A quicker way to paste an item is by pressing its corresponding number (from 0 to 9), displayed next to the item in the preference window.&lt;/p&gt;
+&lt;p&gt;The Clipboard Window (activated by pressing ⌘L when Quicksilver is activated) displays a list of your Clipboard history. You can browse the history using the ↑↓ arrows, and paste text by pressing the Enter key (↩). A quicker way to paste an item is by pressing its corresponding number (from 1 to 9), displayed next to the item in the preference window.&lt;/p&gt;
 &lt;p&gt;Finally, it is possible to drag an item from the Clipboard window to wherever you would like to place it (e.g. on your Desktop) or double click an item to paste it.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Tip&lt;/strong&gt;
-To paste items form the Clipboard Window as plain text, hold the ⌥ (option) key whilst either double clicking an item or pressing a keyboard key (numbers 0 to 9 or ↩)&lt;/p&gt;
+To paste items form the Clipboard Window as plain text, hold the ⌥ (option) key whilst either double clicking an item or pressing a keyboard key (numbers 1 to 9 or ↩)&lt;/p&gt;
 &lt;h3&gt;Proxy Objects&lt;/h3&gt;
 &lt;h4&gt;Clipboard Contents&lt;/h4&gt;
 &lt;p&gt;The 'Clipboard Contents' proxy object returns whatever you have currently copied to your clipboard. It is useful for setting up with triggers. An example could be:&lt;br&gt;

@@ -25,12 +25,12 @@ If you would like to display the contents of your Clipboard history in Quicksilv
 
 #### Pasting Items
 
-The Clipboard Window (activated by pressing ⌘L when Quicksilver is activated) displays a list of your Clipboard history. You can browse the history using the ↑↓ arrows, and paste text by pressing the Enter key (↩). A quicker way to paste an item is by pressing its corresponding number (from 0 to 9), displayed next to the item in the preference window.
+The Clipboard Window (activated by pressing ⌘L when Quicksilver is activated) displays a list of your Clipboard history. You can browse the history using the ↑↓ arrows, and paste text by pressing the Enter key (↩). A quicker way to paste an item is by pressing its corresponding number (from 1 to 9), displayed next to the item in the preference window.
 
 Finally, it is possible to drag an item from the Clipboard window to wherever you would like to place it (e.g. on your Desktop) or double click an item to paste it.
 
 **Tip**
-To paste items form the Clipboard Window as plain text, hold the ⌥ (option) key whilst either double clicking an item or pressing a keyboard key (numbers 0 to 9 or ↩)
+To paste items form the Clipboard Window as plain text, hold the ⌥ (option) key whilst either double clicking an item or pressing a keyboard key (numbers 1 to 9 or ↩)
 
 ### Proxy Objects
 
