@@ -125,22 +125,9 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 			<key>QSClipboardStorageCopy0</key>
 			<dict>
 				<key>action</key>
-				<string>storeCopy:</string>
+				<string>copyNumber:</string>
 				<key>argument</key>
 				<integer>0</integer>
-				<key>icon</key>
-				<string>Clipboard</string>
-				<key>name</key>
-				<string>Clip Store Copy 0</string>
-				<key>target</key>
-				<string>QSPasteboardController</string>
-			</dict>
-			<key>QSClipboardStorageCopy1</key>
-			<dict>
-				<key>action</key>
-				<string>storeCopy:</string>
-				<key>argument</key>
-				<integer>1</integer>
 				<key>icon</key>
 				<string>Clipboard</string>
 				<key>name</key>
@@ -148,12 +135,12 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 				<key>target</key>
 				<string>QSPasteboardController</string>
 			</dict>
-			<key>QSClipboardStorageCopy2</key>
+			<key>QSClipboardStorageCopy1</key>
 			<dict>
 				<key>action</key>
-				<string>storeCopy:</string>
+				<string>copyNumber:</string>
 				<key>argument</key>
-				<integer>2</integer>
+				<integer>1</integer>
 				<key>icon</key>
 				<string>Clipboard</string>
 				<key>name</key>
@@ -161,12 +148,12 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 				<key>target</key>
 				<string>QSPasteboardController</string>
 			</dict>
-			<key>QSClipboardStorageCopy3</key>
+			<key>QSClipboardStorageCopy2</key>
 			<dict>
 				<key>action</key>
-				<string>storeCopy:</string>
+				<string>copyNumber:</string>
 				<key>argument</key>
-				<integer>3</integer>
+				<integer>2</integer>
 				<key>icon</key>
 				<string>Clipboard</string>
 				<key>name</key>
@@ -174,12 +161,12 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 				<key>target</key>
 				<string>QSPasteboardController</string>
 			</dict>
-			<key>QSClipboardStorageCopy4</key>
+			<key>QSClipboardStorageCopy3</key>
 			<dict>
 				<key>action</key>
-				<string>storeCopy:</string>
+				<string>copyNumber:</string>
 				<key>argument</key>
-				<integer>4</integer>
+				<integer>3</integer>
 				<key>icon</key>
 				<string>Clipboard</string>
 				<key>name</key>
@@ -187,12 +174,12 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 				<key>target</key>
 				<string>QSPasteboardController</string>
 			</dict>
-			<key>QSClipboardStorageCopy5</key>
+			<key>QSClipboardStorageCopy4</key>
 			<dict>
 				<key>action</key>
-				<string>storeCopy:</string>
+				<string>copyNumber:</string>
 				<key>argument</key>
-				<integer>5</integer>
+				<integer>4</integer>
 				<key>icon</key>
 				<string>Clipboard</string>
 				<key>name</key>
@@ -200,12 +187,12 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 				<key>target</key>
 				<string>QSPasteboardController</string>
 			</dict>
-			<key>QSClipboardStorageCopy6</key>
+			<key>QSClipboardStorageCopy5</key>
 			<dict>
 				<key>action</key>
-				<string>storeCopy:</string>
+				<string>copyNumber:</string>
 				<key>argument</key>
-				<integer>6</integer>
+				<integer>5</integer>
 				<key>icon</key>
 				<string>Clipboard</string>
 				<key>name</key>
@@ -213,12 +200,12 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 				<key>target</key>
 				<string>QSPasteboardController</string>
 			</dict>
-			<key>QSClipboardStorageCopy7</key>
+			<key>QSClipboardStorageCopy6</key>
 			<dict>
 				<key>action</key>
-				<string>storeCopy:</string>
+				<string>copyNumber:</string>
 				<key>argument</key>
-				<integer>7</integer>
+				<integer>6</integer>
 				<key>icon</key>
 				<string>Clipboard</string>
 				<key>name</key>
@@ -226,12 +213,12 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 				<key>target</key>
 				<string>QSPasteboardController</string>
 			</dict>
-			<key>QSClipboardStorageCopy8</key>
+			<key>QSClipboardStorageCopy7</key>
 			<dict>
 				<key>action</key>
-				<string>storeCopy:</string>
+				<string>copyNumber:</string>
 				<key>argument</key>
-				<integer>8</integer>
+				<integer>7</integer>
 				<key>icon</key>
 				<string>Clipboard</string>
 				<key>name</key>
@@ -239,12 +226,12 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 				<key>target</key>
 				<string>QSPasteboardController</string>
 			</dict>
-			<key>QSClipboardStorageCopy9</key>
+			<key>QSClipboardStorageCopy8</key>
 			<dict>
 				<key>action</key>
-				<string>storeCopy:</string>
+				<string>copyNumber:</string>
 				<key>argument</key>
-				<integer>9</integer>
+				<integer>8</integer>
 				<key>icon</key>
 				<string>Clipboard</string>
 				<key>name</key>

@@ -159,13 +159,19 @@
 	[(QSDockingWindow *)[self window] show:sender];
 }
 
+// used for the 'clip store copy' objects (see the plist)
+- (void)copyNumber:(NSNumber *)number {
+    NSUInteger zeroIndexNumber = [number unsignedIntegerValue];
+    [pasteboardHistoryTable selectRowIndexes:[NSIndexSet indexSetWithIndex:zeroIndexNumber] byExtendingSelection:NO];
+     [self copyToClipboard:[self selectedObject]];
+ }
+     
 // used for the 'clip store paste' objects
 - (void)pasteNumber:(NSNumber *)number {
-    [self pasteNumber:[number integerValue] plainText:NO];
+    [self pasteNumber:[number unsignedIntegerValue] plainText:NO];
 }
 
 - (void)pasteNumber:(NSUInteger)number plainText:(BOOL)plainText {
-    // switch between human numbering and machine numbering (0/1 start)
     NSIndexSet *rowSet = [NSIndexSet indexSetWithIndex:number];
     
     if (mode == QSPasteboardStoreMode && plainText == YES) {
@@ -507,6 +513,7 @@
     }
     if ([keys containsObject:
          chars]) {
+        // switch between human numbering and machine numbering (0/1 start) so -1 from the chars integer value
         [self pasteNumber:[chars integerValue] - 1 plainText:([theEvent modifierFlags] & NSAlternateKeyMask)];
     }
     else if ([chars characterAtIndex:0] == NSCarriageReturnCharacter || [chars characterAtIndex:0] == NSEnterCharacter) {
