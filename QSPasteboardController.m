@@ -159,6 +159,25 @@
 	[(QSDockingWindow *)[self window] show:sender];
 }
 
+// used for the 'clip store paste' objects
+- (void)pasteNumber:(NSNumber *)number {
+    [self pasteNumber:[number integerValue] plainText:NO];
+}
+
+- (void)pasteNumber:(NSUInteger)number plainText:(BOOL)plainText {
+    // switch between human numbering and machine numbering (0/1 start)
+    NSIndexSet *rowSet = [NSIndexSet indexSetWithIndex:number];
+    
+    if (mode == QSPasteboardStoreMode && plainText == YES) {
+        [pasteboardStoreArray replaceObjectAtIndex:number withObject:[QSObject objectWithPasteboard:[NSPasteboard generalPasteboard]]];
+        [pasteboardHistoryTable selectRowIndexes:rowSet byExtendingSelection:NO];
+    } else {
+        
+        [pasteboardHistoryTable selectRowIndexes:rowSet byExtendingSelection:NO];
+        [self pasteItem:self];
+        [pasteboardHistoryTable reloadData];
+    }
+}
 
 - (void)pasteItem:(id)sender {
     //  activateFrontWindowOfApplication
@@ -488,26 +507,13 @@
     }
     if ([keys containsObject:
          chars]) {
-        // switch between human numbering and machine numbering (0/1 start)
-        NSInteger row = [chars integerValue] - 1;
-        NSIndexSet *rowSet = [NSIndexSet indexSetWithIndex:row];
-		
-		if (mode == QSPasteboardStoreMode && [theEvent modifierFlags] & NSAlternateKeyMask) {
-			[pasteboardStoreArray replaceObjectAtIndex:row withObject:[QSObject objectWithPasteboard:[NSPasteboard generalPasteboard]]];
-			[pasteboardHistoryTable selectRowIndexes:rowSet byExtendingSelection:NO];
-		} else {
-			
-			[pasteboardHistoryTable selectRowIndexes:rowSet byExtendingSelection:NO];
-			[self pasteItem:self];
-			[pasteboardHistoryTable reloadData];
-		}
+        [self pasteNumber:[chars integerValue] - 1 plainText:([theEvent modifierFlags] & NSAlternateKeyMask)];
     }
     else if ([chars characterAtIndex:0] == NSCarriageReturnCharacter || [chars characterAtIndex:0] == NSEnterCharacter) {
         [self pasteItem:self];
-    } else {
-        [self interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
+        return;
     }
-    //   else [super keyDown:theEvent];
+    [self interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
 }
 
 - (BOOL)performKeyEquivalent:(NSEvent *)theEvent {
