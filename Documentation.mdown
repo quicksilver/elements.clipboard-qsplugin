@@ -38,3 +38,13 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 
 The 'Clipboard Contents' proxy object returns whatever you have currently copied to your clipboard. It is useful for setting up with triggers. An example could be:  
 'Clipboard Contents ⇥ Find With... ⇥ Google'
+
+### Action Objects
+
+By default, the Clipboard plugin adds a serious of 'action objects' which can be run from Quicksilver's 1st pane, or more usefully, as triggers. These are:
+
+* **Clip store paste `<number>`**
+* **Clip store copy `<number>`**
+
+`Clip store paste` can be used to paste the clipboard's contents corresponding to `<number>`. For example, `Clip store paste 9` will paste the 9th item from the pasteboard.
+`Clip store copy` works in a similar way, except instead of pasting the item directly, it copies it to the clipboard.
