@@ -346,7 +346,7 @@
             return;
         }
         
-		BOOL keepOldObject = FALSE;
+//		BOOL keepOldObject = FALSE;
 		// check the string value of the objects to compare (the object's aren't necessarily the same if one has more pasteboard types
 		// (e.g. RTF data) than the other)
 		// receiving selection decides whether an existing object on the clipboard should be 'moved up' to the 0th position
@@ -358,8 +358,8 @@
 				// Fix the object with the most types (each type is stored in the dataDictionary)
 				if([[pasteboardObject dataDictionary] count] > [[newObject dataDictionary] count]) {
 					//Keep the old object, it's better
-					[newObject setDataDictionary:[[pasteboardObject dataDictionary] mutableCopy]];
-					keepOldObject = TRUE;
+                    [[newObject dataDictionary] addEntriesFromDictionary:[pasteboardObject dataDictionary]];
+//					keepOldObject = TRUE;
 				}
 				[pasteboardHistoryArray removeObject:pasteboardObject];
 				break;
