@@ -11,8 +11,14 @@
 	
 	[QSPasteboardMonitor sharedInstance];
     NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
-	if ([defaults boolForKey:kCapturePasteboardHistory])
+	
+    if ([defaults boolForKey:kCapturePasteboardHistory]) {
 		[QSPasteboardController sharedInstance];
+    } else if ([defaults objectForKey:kCapturePasteboardHistory] == nil) {
+        [defaults setBool:YES forKey:kCapturePasteboardHistory];
+        [QSPasteboardController sharedInstance];
+    }
+    
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self selector:@selector(saveVisibilityState:) name:@"QSEventNotification" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showClipboardHidden:) name:@"QSApplicationDidFinishLaunchingNotification" object:nil];
