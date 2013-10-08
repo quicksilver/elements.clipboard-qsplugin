@@ -2,6 +2,12 @@
 #import "QSPasteboardController.h"
 #import "QSPasteboardAccessoryCell.h"
 
+@interface QSController : NSWindowController
+
+- (QSInterfaceController *)interfaceController;
+
+@end
+
 @implementation QSPasteboardController
 
 + (void)initialize {
@@ -23,8 +29,8 @@
     [nc addObserver:self selector:@selector(saveVisibilityState:) name:@"QSEventNotification" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showClipboardHidden:) name:@"QSApplicationDidFinishLaunchingNotification" object:nil];
     
-	NSImage *image = [[[NSImage alloc] initByReferencingFile:
-                       [[NSBundle bundleForClass:[QSPasteboardController class]]pathForImageResource:@"Clipboard"]] autorelease];
+	NSImage *image = [[NSImage alloc] initByReferencingFile:
+                       [[NSBundle bundleForClass:[QSPasteboardController class]]pathForImageResource:@"Clipboard"]];
 	[image shrinkToSize:QSSize16];
 	[modMenuItem setImage:image];
     
@@ -82,7 +88,7 @@
 
 + (id)sharedInstance {
     static id _sharedInstance;
-    if (!_sharedInstance) _sharedInstance = [[[self class] allocWithZone:[self zone]] init];
+    if (!_sharedInstance) _sharedInstance = [[[self class] allocWithZone:nil] init];
     return _sharedInstance;
 }
 
@@ -205,7 +211,7 @@
 	
 	[self hideWindow:sender];
     
-    [[[NSApp delegate] interfaceController] hideWindows:self];
+    [[(QSController *)[NSApp delegate] interfaceController] hideWindows:self];
     
     
 	// ***warning   * the clipboard should be restored
@@ -267,10 +273,10 @@
     
     [pasteboardHistoryTable setTarget:self];
     
-    newCell = [[[QSObjectCell alloc] init] autorelease];
+    newCell = [[QSObjectCell alloc] init];
     [[pasteboardHistoryTable tableColumnWithIdentifier: @"object"] setDataCell:newCell];
     
-    newCell = [[[QSPasteboardAccessoryCell alloc] init] autorelease];
+    newCell = [[QSPasteboardAccessoryCell alloc] init];
     
     [[pasteboardHistoryTable tableColumnWithIdentifier: @"sequence"] setDataCell:newCell];
     
@@ -357,7 +363,6 @@
 		// (e.g. RTF data) than the other)
 		// receiving selection decides whether an existing object on the clipboard should be 'moved up' to the 0th position
 		BOOL recievingSelection = [[[self selectedObject] stringValue] isEqualToString:[newObject stringValue]];
-		[[newObject retain] autorelease];
 		for(QSObject *pasteboardObject in pasteboardHistoryArray) {
 			// if the object (string) is already on the pasteboard
 			if([[pasteboardObject stringValue] isEqualToString:[newObject stringValue]]) {
@@ -515,7 +520,7 @@
     NSString *chars = [theEvent charactersIgnoringModifiers];
     static NSArray *keys = nil;
     if (keys == nil) {
-        keys = [@[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9"] retain];
+        keys = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9"];
     }
     if ([keys containsObject:
          chars]) {
@@ -552,8 +557,7 @@
 }
 
 - (IBAction)showPreferences:(id)sender {
-	[NSClassFromString(@"QSPreferencesController") showPaneWithIdentifier:@"QSPasteboardPrefPane"];
-	[NSApp activateIgnoringOtherApps:YES];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"qs://preferences#QSPasteboardPrefPane"]];
 }
 
 
