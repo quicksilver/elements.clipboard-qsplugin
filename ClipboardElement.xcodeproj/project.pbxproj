@@ -280,8 +280,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 14A8D33310CE6212003857E3 /* QSPlugIn.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				INFOPLIST_FILE = Resources/Info.plist;
 				PRODUCT_NAME = "Clipboard Plugin";
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -305,9 +307,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 14A8D33310CE6212003857E3 /* QSPlugIn.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				INFOPLIST_FILE = Resources/Info.plist;
 				OTHER_LDFLAGS = "-bundle";
 				PRODUCT_NAME = "Clipboard Plugin";
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
