@@ -3,10 +3,8 @@
 #import <Foundation/Foundation.h>
 
 
-@interface QSPasteboardAccessoryCell : NSCell {
-    NSColor *textColor;
-}
+@interface QSPasteboardAccessoryCell : NSCell
 
-- (NSColor *)textColor;
-- (void)setTextColor:(NSColor *)newTextColor;
+@property (retain) NSColor *textColor;
+
 @end

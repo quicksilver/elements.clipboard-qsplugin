@@ -6,6 +6,8 @@
 
 @implementation QSPasteboardAccessoryCell
 
+@synthesize textColor = _textColor;
+
 - (id)initImageCell:(NSImage *)anImage{
     if (self=[super initImageCell:anImage]){
         
@@ -15,13 +17,14 @@
 
 - (void)dealloc{
 	[self setTextColor:nil];
-	[super dealloc];	
 }
-- (NSColor *)textColor { return textColor; }
+
+- (NSColor *)textColor {
+    return _textColor;
+}
 
 - (void)setTextColor:(NSColor *)newTextColor {
-    [textColor release];
-    textColor = [newTextColor retain];
+    _textColor = newTextColor;
 	[[self controlView] setNeedsDisplay:YES];
 }
 
