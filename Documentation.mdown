@@ -1,13 +1,13 @@
 ### Clipboard Plugin
 
-The clipboard plugin gives Quicksilver the ability to keep a record of the Clipboard history, storing it in the 'Clipboard History' item in Quicksilver (type 'Clipboard History' into Quicksilver).  
+The clipboard plugin gives Quicksilver the ability to keep a record of the Clipboard history (disabled by default), storing it in the 'Clipboard History' item in Quicksilver (type 'Clipboard History' into Quicksilver).  
 In addition to viewing the clipboard history in Quicksilver, the plugin adds a floating panel which displays all your history. To open the panel, open Quicksilver and press ⌘L.
 
 ### Preferences
 
 The Clipboard preferences allow you to alter the behaviour of how Quicksilver stores your clipboard contents. The following options are available:
 
-*   **Capture History:** Turn on the history capture option, so Quicksilver will keep a record of your history items. Enter the number of items you would like Quicksilver to store. 20 items is a good starting point.
+*   **Capture History:** Turn on the history capture option, so Quicksilver will keep a record of your history items, and restore them across system reboots. This will save your clipboard data to the disk, so you should consider any security issues before enabling the option. Enter the number of items you would like Quicksilver to store in the box alongside. 20 items is a good starting point.
 *   **Hide after pasting:** Enabling this option causes the Clipboard window to hide when you paste an item.
 *   **Ignore Applications:** Sometimes you may copy sensitive information for certain applications, if you want Quicksilver to ignore all clipboard entries from a given application, then enter its name in the box.
 
