@@ -77,6 +77,11 @@
     if ([[notif object] isEqualToString:@"QSQuicksilverWillQuitEvent"]) {
 		BOOL visible = ![(QSDockingWindow *)[[self sharedInstance] window] hidden];
         [[NSUserDefaults standardUserDefaults] setBool:visible forKey:@"QSPasteboardHistoryIsVisible"];
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:kStorePasteboardHistoryOnDisk]) {
+            // make sure any existing history is overwritten
+            [[QSLib shelfNamed:@"QSPasteboardHistory"] removeAllObjects];
+            [QSLib savePasteboardHistory];
+        }
     }
 }
 
@@ -96,8 +101,7 @@
 - (id)init {
     if (self = [super initWithWindowNibName:@"Pasteboard" owner:self]) {
 		
-		pasteboardHistoryArray = nil;
-		pasteboardHistoryArray = [[QSLibrarian sharedInstance] shelfNamed:@"QSPasteboardHistory"]; //[[NSMutableArray alloc] initWithCapacity:1];
+        pasteboardHistoryArray = [[QSLibrarian sharedInstance] shelfNamed:@"QSPasteboardHistory"];
 		
 		currentArray = pasteboardHistoryArray;
 		mode = QSPasteboardHistoryMode;
@@ -423,8 +427,9 @@
 		
 		
         //[pasteboardItemView setObjectValue:[pasteboardHistoryArray objectAtIndex:0]];
-        
-        [QSLib savePasteboardHistory];
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:kStorePasteboardHistoryOnDisk]) {
+            [QSLib savePasteboardHistory];
+        }
     } else {
 		//  if (VERBOSE) NSLog(@"Unable to create object");
     }
@@ -463,7 +468,9 @@
 			if (index) {
 				[pasteboardHistoryArray removeObjectAtIndex:index];
 				[pasteboardHistoryTable reloadData];
-				[QSLib savePasteboardHistory];
+                if ([[NSUserDefaults standardUserDefaults] boolForKey:kStorePasteboardHistoryOnDisk]) {
+                    [QSLib savePasteboardHistory];
+                }
 			}
 			break;
 		case QSPasteboardStoreMode:
