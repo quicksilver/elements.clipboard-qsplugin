@@ -193,7 +193,7 @@
 		0259C573FE90428111CA0C5A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0500;
 			};
 			buildConfigurationList = 7F07AF72085E432C00E2AFC4 /* Build configuration list for PBXProject "ClipboardElement" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -299,6 +299,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 14A8D32E10CE6212003857E3 /* Debug.xcconfig */;
 			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "Clipboard Plugin";
 			};
 			name = Debug;

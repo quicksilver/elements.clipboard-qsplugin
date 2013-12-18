@@ -52,10 +52,6 @@
 }
 
 + (BOOL)validateMenuItem:(NSMenuItem*)anItem {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	if ([anItem action] == @selector(showClipboards:) ) {
-		[defaults boolForKey:kCapturePasteboardHistory];
-	}
 	return YES;
 }
 

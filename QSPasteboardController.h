@@ -41,6 +41,9 @@ typedef enum {
 	NSUInteger mode;
     dispatch_queue_t pasteboardQueue;
 }
+
++ (void)showClipboard:(id)sender;
+
 - (void)clearStore;
 - (void)copyToClipboard:(QSObject*)obj;
 - (id)selectedObject;
