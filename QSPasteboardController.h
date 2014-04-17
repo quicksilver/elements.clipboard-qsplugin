@@ -19,9 +19,7 @@ typedef enum {
     NSMutableArray *pasteboardHistoryArray;
     NSMutableArray *pasteboardStoreArray;
     NSMutableArray *pasteboardCacheArray;
-	
-	NSMutableArray *currentArray;
-	
+		
     IBOutlet NSMatrix *pasteboardHistoryMatrix;
     IBOutlet NSTableView *pasteboardHistoryTable;
     IBOutlet QSObjectView *pasteboardItemView;
@@ -41,6 +39,8 @@ typedef enum {
 	NSUInteger mode;
     dispatch_queue_t pasteboardQueue;
 }
+
+@property NSMutableArray *currentArray;
 
 + (void)showClipboard:(id)sender;
 

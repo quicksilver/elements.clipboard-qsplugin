@@ -95,7 +95,7 @@
 		pasteboardHistoryArray = nil;
 		pasteboardHistoryArray = [[QSLibrarian sharedInstance] shelfNamed:@"QSPasteboardHistory"]; //[[NSMutableArray alloc] initWithCapacity:1];
 		
-		currentArray = pasteboardHistoryArray;
+		self.currentArray = pasteboardHistoryArray;
 		mode = QSPasteboardHistoryMode;
 		pasteboardStoreArray = [[NSMutableArray alloc] init];
 		[self clearStore];
@@ -344,7 +344,7 @@
 	// run through the pasteboard history, removing unused (over the max count) objects
 	while ((NSInteger)[pasteboardHistoryArray count] >maxCount) [pasteboardHistoryArray removeLastObject];
 	// get a new object from the general (system-wide) pasteboard
-         QSObject *newObject = [QSObject objectWithPasteboard:[[notif object] objectForKey:@"Pasteboard"]];
+    QSObject *newObject = [QSObject objectWithPasteboard:[[notif object] objectForKey:@"Pasteboard"]];
 	
 	if (!newObject) {
         return;
@@ -490,11 +490,14 @@
     }
 }
 - (id)selectedObject {
-    NSInteger index = [pasteboardHistoryTable selectedRow];
-    if (index<0) return nil;
-    if (![currentArray count]) return nil;
-    return [currentArray objectAtIndex:index];
+    @synchronized(self.currentArray) {
+        NSInteger index = [pasteboardHistoryTable selectedRow];
+        if (index<0) return nil;
+        if (![self.currentArray count]) return nil;
+        return [self.currentArray objectAtIndex:index];
+    }
 }
+
 - (void)copyToClipboard:(QSObject *)obj {
     if (!asPlainText) {
         [obj putOnPasteboard:[NSPasteboard generalPasteboard] includeDataForTypes:nil];
@@ -560,22 +563,22 @@
 	switch (mode) {
 		case QSPasteboardHistoryMode:
 			[titleField setStringValue:@"Clipboard History"];
-			currentArray = pasteboardHistoryArray;
+			self.currentArray = pasteboardHistoryArray;
 			break;
 		case QSPasteboardStoreMode:
 			
 			[titleField setStringValue:@"Clipboard Storage"];
-			currentArray = pasteboardStoreArray;
+			self.currentArray = pasteboardStoreArray;
 			break;
 		case QSPasteboardQueueMode:
 			[titleField setStringValue:@"Clipboard Cache Old"];
 			[self setCacheIsReversed:YES];
-			currentArray = pasteboardCacheArray;
+			self.currentArray = pasteboardCacheArray;
 			break;
 		case QSPasteboardStackMode:
 			[titleField setStringValue:@"Clipboard Cache New"];
 			[self setCacheIsReversed:NO];
-			currentArray = pasteboardCacheArray;
+			self.currentArray = pasteboardCacheArray;
 		default:
 			break;
 	}
@@ -608,18 +611,20 @@
 # pragma mark Table Handling
 
 - (NSInteger) numberOfRowsInTableView:(NSTableView *)tableView {
-    return [currentArray count];
+    return [self.currentArray count];
 }
 
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
     //  rowIndex++;
-	if (rowIndex>((NSInteger)[currentArray count] -1) ) {
-		return nil;
-	}
-    if ([[aTableColumn identifier] isEqualToString:@"object"] && (NSInteger)[currentArray count] >rowIndex)
-        return [currentArray objectAtIndex:rowIndex];
-    if ([[aTableColumn identifier] isEqualToString:@"sequence"]) {
-        if (rowIndex<9) return [NSNumber numberWithInteger:rowIndex+1];
+    @synchronized(self.currentArray) {
+        if (rowIndex>((NSInteger)[self.currentArray count] -1) ) {
+            return nil;
+        }
+        if ([[aTableColumn identifier] isEqualToString:@"object"] && (NSInteger)[self.currentArray count] >rowIndex)
+            return [self.currentArray objectAtIndex:rowIndex];
+        if ([[aTableColumn identifier] isEqualToString:@"sequence"]) {
+            if (rowIndex<9) return [NSNumber numberWithInteger:rowIndex+1];
+        }
     }
 	
 	//	if ([[aTableColumn identifier] isEqualToString:@"source"]) {
@@ -636,9 +641,9 @@
 }
 - (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
     //NSLog(@"setCell %d", rowIndex);
-    if (rowIndex >= (NSInteger)([currentArray count] -1) ) return;
+    if (rowIndex >= (NSInteger)([self.currentArray count] -1) ) return;
     if ([[aTableColumn identifier] isEqualToString:@"object"]) {
-        [aCell setRepresentedObject:[currentArray objectAtIndex:rowIndex]];
+        [aCell setRepresentedObject:[self.currentArray objectAtIndex:rowIndex]];
 		[aCell setState:NSOffState];
     }
 }
@@ -647,8 +652,8 @@ static NSInteger _draggedRow = -1;
 	
 	_draggedRow = [[rows objectAtIndex:0] integerValue];
 	
-	if ([[currentArray objectAtIndex:_draggedRow] isKindOfClass:[QSNullObject class]]) return NO;
-    [[currentArray objectAtIndex:[[rows objectAtIndex:0] integerValue]]putOnPasteboard:pboard includeDataForTypes:nil];
+	if ([[self.currentArray objectAtIndex:_draggedRow] isKindOfClass:[QSNullObject class]]) return NO;
+    [[self.currentArray objectAtIndex:[[rows objectAtIndex:0] integerValue]]putOnPasteboard:pboard includeDataForTypes:nil];
     return YES;
 }
 - (NSDragOperation) tableView:(NSTableView *)tableView validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)operation {
@@ -678,7 +683,7 @@ static NSInteger _draggedRow = -1;
 	QSObject *object = nil;
 	
 	if ([info draggingSource] == tableView)
-		object = [currentArray objectAtIndex:_draggedRow];
+		object = [self.currentArray objectAtIndex:_draggedRow];
 	else
 		object = [QSObject objectWithPasteboard:[info draggingPasteboard]];
 	switch (mode) {
