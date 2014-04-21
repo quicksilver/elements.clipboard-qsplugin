@@ -24,10 +24,12 @@
 
 
 - (void)checkPasteboard:(NSTimer *)timer{
-    NSInteger changeCount=[[NSPasteboard generalPasteboard]changeCount];
-    if (changeCount==lastChangeCount) return;
-    lastChangeCount=changeCount;
-    [[NSNotificationCenter defaultCenter] postNotificationName:QSPasteboardDidChangeNotification object:[NSPasteboard generalPasteboard]];
+    NSInteger changeCount = [[NSPasteboard generalPasteboard] changeCount];
+    if (changeCount==lastChangeCount) {
+        return;
+    }
+    lastChangeCount = changeCount;
+    [[NSNotificationCenter defaultCenter] postNotificationName:QSPasteboardDidChangeNotification object:@{@"Pasteboard" : [NSPasteboard generalPasteboard], @"ActiveApp" : [[[NSWorkspace sharedWorkspace] activeApplication] objectForKey:@"NSApplicationBundleIdentifier"]}];
 }
 
 

@@ -13,15 +13,14 @@ typedef enum {
 #define kCapturePasteboardHistory @"Capture Pasteboard History"
 #define kCapturePasteboardHistoryCount @"Capture Pasteboard History Count"
 #define kStorePasteboardHistoryOnDisk @"Store Pasteboard History"
+#define kCapturePasteboardIgnoreApps @"clipboardIgnoreApps"
 
 @interface QSPasteboardController : NSWindowController {
 	// Array storing all the clipboard history
     NSMutableArray *pasteboardHistoryArray;
     NSMutableArray *pasteboardStoreArray;
     NSMutableArray *pasteboardCacheArray;
-	
-	NSMutableArray *currentArray;
-	
+		
     IBOutlet NSMatrix *pasteboardHistoryMatrix;
     IBOutlet NSTableView *pasteboardHistoryTable;
     IBOutlet QSObjectView *pasteboardItemView;
@@ -35,8 +34,17 @@ typedef enum {
     BOOL adjustRowsToFit;
 	BOOL cacheIsReversed;
     BOOL asPlainText;
+    NSInteger maxPasteboardCount;
+    BOOL captureHistory;
+    NSArray *ignoredApps;
 	NSUInteger mode;
+    dispatch_queue_t pasteboardQueue;
 }
+
+@property NSMutableArray *currentArray;
+
++ (void)showClipboard:(id)sender;
+
 - (void)clearStore;
 - (void)copyToClipboard:(QSObject*)obj;
 - (id)selectedObject;

@@ -8,7 +8,7 @@
 
     NSTimer *pollTimer;
 
-    int lastChangeCount;
+    NSInteger lastChangeCount;
 }
 + (id)sharedInstance;
 
