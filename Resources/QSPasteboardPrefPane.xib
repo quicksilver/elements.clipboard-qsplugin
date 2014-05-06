@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4511" systemVersion="13A598" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4511" systemVersion="13C1021" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment version="1060" defaultVersion="1070" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4511"/>
@@ -145,8 +145,12 @@
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
+                            <binding destination="17" name="value" keyPath="values.Discard Pasteboard History" id="7XS-a6-QZ2">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                             <binding destination="17" name="enabled" keyPath="values.Capture Pasteboard History" id="DcF-TM-9qT"/>
-                            <binding destination="17" name="value" keyPath="values.Store Pasteboard History" id="4Eb-4F-suk"/>
                         </connections>
                     </button>
                 </subviews>

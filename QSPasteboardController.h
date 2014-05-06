@@ -12,7 +12,7 @@ typedef enum {
 
 #define kCapturePasteboardHistory @"Capture Pasteboard History"
 #define kCapturePasteboardHistoryCount @"Capture Pasteboard History Count"
-#define kStorePasteboardHistoryOnDisk @"Store Pasteboard History"
+#define kDiscardPasteboardHistoryOnRelaunch @"Discard Pasteboard History"
 #define kCapturePasteboardIgnoreApps @"clipboardIgnoreApps"
 
 @interface QSPasteboardController : NSWindowController {
