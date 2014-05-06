@@ -24,6 +24,17 @@
 	<string>Copyright © 2014, QSApp</string>
 	<key>NSPrincipalClass</key>
 	<string>QSPasteboardController</string>
+	<key>QSDefaults</key>
+	<dict>
+		<key>Capture Pasteboard History</key>
+		<false/>
+		<key>Capture Pasteboard History Count</key>
+		<integer>10</integer>
+		<key>Discard Pasteboard History</key>
+		<true/>
+		<key>QSPasteboardController HideAfterPasting</key>
+		<false/>
+	</dict>
 	<key>QSLoadImmediately</key>
 	<true/>
 	<key>QSPlugIn</key>
