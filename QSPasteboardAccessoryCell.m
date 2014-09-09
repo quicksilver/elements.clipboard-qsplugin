@@ -20,12 +20,16 @@
 }
 
 - (NSColor *)textColor {
-    return _textColor;
+    @synchronized(self) {
+        return _textColor;
+    }
 }
 
 - (void)setTextColor:(NSColor *)newTextColor {
-    _textColor = newTextColor;
-	[[self controlView] setNeedsDisplay:YES];
+    @synchronized(self) {
+        _textColor = newTextColor;
+        [[self controlView] setNeedsDisplay:YES];
+    }
 }
 
 - (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView{
