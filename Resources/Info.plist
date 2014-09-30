@@ -24,6 +24,17 @@
 	<string>Copyright © 2014, QSApp</string>
 	<key>NSPrincipalClass</key>
 	<string>QSPasteboardController</string>
+	<key>QSDefaults</key>
+	<dict>
+		<key>Capture Pasteboard History</key>
+		<false/>
+		<key>Capture Pasteboard History Count</key>
+		<integer>10</integer>
+		<key>Discard Pasteboard History</key>
+		<true/>
+		<key>QSPasteboardController HideAfterPasting</key>
+		<false/>
+	</dict>
 	<key>QSLoadImmediately</key>
 	<true/>
 	<key>QSPlugIn</key>
@@ -43,11 +54,16 @@
 In addition to viewing the clipboard history in Quicksilver, the plugin adds a floating panel which displays all your history. To open the panel, open Quicksilver and press ⌘L.&lt;/p&gt;
 &lt;h3&gt;Preferences&lt;/h3&gt;
 &lt;p&gt;The Clipboard preferences allow you to alter the behaviour of how Quicksilver stores your clipboard contents. The following options are available:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Capture History:&lt;/strong&gt; Turn on the history capture option, so Quicksilver will keep a record of your history items, and restore them across system reboots. This will save your clipboard data to the disk, so you should consider any security issues before enabling the option. Enter the number of items you would like Quicksilver to store in the box alongside. 20 items is a good starting point.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Hide after pasting:&lt;/strong&gt; Enabling this option causes the Clipboard window to hide when you paste an item.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Ignore Applications:&lt;/strong&gt; Sometimes you may copy sensitive information for certain applications, if you want Quicksilver to ignore all clipboard entries from a given application, then enter its name in the box.&lt;/li&gt;
-&lt;/ul&gt;
+&lt;dl&gt;
+&lt;dt&gt;Capture History&lt;/dt&gt;
+&lt;dd&gt;Turn on the history capture option, so Quicksilver will keep a record of your history items. Enter the number of items you would like Quicksilver to store in the box alongside. 20 items is a good starting point.&lt;/dd&gt;
+&lt;dt&gt;Keep history when restarting&lt;/dt&gt;
+&lt;dd&gt;Enable this to preserve clipboard history when Quicksilver or your computer are restarted. This will save your clipboard data to the disk, so you should consider any security issues before enabling the option.&lt;/dd&gt;
+&lt;dt&gt;Hide after pasting&lt;/dt&gt;
+&lt;dd&gt;Enabling this option causes the Clipboard window to hide when you paste an item.&lt;/dd&gt;
+&lt;dt&gt;Ignore Applications&lt;/dt&gt;
+&lt;dd&gt;Sometimes you may copy sensitive information for certain applications, if you want Quicksilver to ignore all clipboard entries from a given application, then enter its name in the box.&lt;/dd&gt;
+&lt;/dl&gt;
 &lt;h3&gt;Clipboard Window&lt;/h3&gt;
 &lt;h4&gt;Positioning the window&lt;/h4&gt;
 &lt;p&gt;The Clipboard Window is a floating panel specific to Quicksilver, giving it several useful features for positioning. Positioning the window on the side of the screen will cause it to become 'docked' on the screen edge. It will then slide into the screen edge. Hover over the edge of the screen to make the window reappear.&lt;/p&gt;
