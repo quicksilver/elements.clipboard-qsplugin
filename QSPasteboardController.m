@@ -73,7 +73,7 @@
     if ([[notif object] isEqualToString:@"QSQuicksilverWillQuitEvent"]) {
 		BOOL visible = ![(QSDockingWindow *)[[self sharedInstance] window] hidden];
         [[NSUserDefaults standardUserDefaults] setBool:visible forKey:@"QSPasteboardHistoryIsVisible"];
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:kDiscardPasteboardHistoryOnRelaunch]) {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:kDiscardPasteboardHistoryOnQuit]) {
             // make sure any existing history is overwritten
             [[QSLib shelfNamed:@"QSPasteboardHistory"] removeAllObjects];
             [QSLib savePasteboardHistory];
@@ -431,7 +431,7 @@
                 [pasteboardHistoryTable deselectRow:row];
         }
     }
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:kDiscardPasteboardHistoryOnRelaunch]) {
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:kDiscardPasteboardHistoryOnQuit]) {
         [QSLib savePasteboardHistory];
     }
 }
@@ -466,7 +466,7 @@
 			if (index) {
 				[pasteboardHistoryArray removeObjectAtIndex:index];
 				[pasteboardHistoryTable reloadData];
-                if (![[NSUserDefaults standardUserDefaults] boolForKey:kDiscardPasteboardHistoryOnRelaunch]) {
+                if (![[NSUserDefaults standardUserDefaults] boolForKey:kDiscardPasteboardHistoryOnQuit]) {
                     [QSLib savePasteboardHistory];
                 }
 			}
