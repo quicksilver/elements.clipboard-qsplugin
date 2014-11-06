@@ -357,8 +357,8 @@
         return;
     }
     // some apps (e.g. 1Password and its browser extensions) copy a blank string to the clipboard to clear it.
-    // Quicksilver should take this into consideration and clear the
-    if ([newObject objectForType:QSTextType] && ![[newObject objectForType:QSTextType] length]) {
+    // Quicksilver should take this into consideration and remove the empty value from history
+    if ([pasteboardHistoryArray count] && [newObject objectForType:QSTextType] && ![[newObject objectForType:QSTextType] length]) {
         [pasteboardHistoryArray removeObjectAtIndex:0];
         return;
     }
