@@ -488,6 +488,8 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 		</array>
 		<key>version</key>
 		<string>400D</string>
+		<key>osRequired</key>
+		<string>10.9</string>
 	</dict>
 	<key>QSResourceAdditions</key>
 	<dict>
