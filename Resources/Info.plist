@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.4.3</string>
+	<string>1.4.4</string>
 	<key>CFBundleVersion</key>
-	<string>140</string>
+	<string>141</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2014, QSApp</string>
 	<key>NSPrincipalClass</key>
@@ -91,10 +91,6 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 &lt;code&gt;Clip store copy&lt;/code&gt; works in a similar way, except instead of pasting the item directly, it copies it to the clipboard.&lt;/p&gt;</string>
 		<key>icon</key>
 		<string>Clipboard</string>
-		<key>qsversion</key>
-		<string>2A5F</string>
-		<key>requiresFeature</key>
-		<string>0</string>
 	</dict>
 	<key>QSRegistration</key>
 	<dict>
@@ -477,6 +473,8 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 	</dict>
 	<key>QSRequirements</key>
 	<dict>
+		<key>osRequired</key>
+		<string>10.9</string>
 		<key>plugins</key>
 		<array>
 			<dict>
@@ -488,8 +486,6 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 		</array>
 		<key>version</key>
 		<string>400D</string>
-		<key>osRequired</key>
-		<string>10.9</string>
 	</dict>
 	<key>QSResourceAdditions</key>
 	<dict>
