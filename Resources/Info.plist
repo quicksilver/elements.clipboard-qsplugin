@@ -434,6 +434,19 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 		</dict>
 		<key>QSProxies</key>
 		<dict>
+			<key>QSFindPasteboardProxy</key>
+			<dict>
+				<key>icon</key>
+				<string>Clipboard</string>
+				<key>name</key>
+				<string>Current Find Clipboard</string>
+				<key>providerClass</key>
+				<string>QSPasteboardController</string>
+				<key>types</key>
+				<array>
+					<string>NSStringPboardType</string>
+				</array>
+			</dict>
 			<key>QSGeneralPasteboardProxy</key>
 			<dict>
 				<key>icon</key>
