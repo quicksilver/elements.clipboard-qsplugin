@@ -80,7 +80,9 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 &lt;h3&gt;Proxy Objects&lt;/h3&gt;
 &lt;h4&gt;Clipboard Contents&lt;/h4&gt;
 &lt;p&gt;The 'Clipboard Contents' proxy object returns whatever you have currently copied to your clipboard. It is useful for setting up with triggers. An example could be:&lt;br&gt;
-'Clipboard Contents ⇥ Find With... ⇥ Google'&lt;/p&gt;
+'Clipboard Contents ⇥ Find With… ⇥ Google'&lt;/p&gt;
+&lt;h4&gt;Current Find Clipboard&lt;/h4&gt;
+&lt;p&gt;This returns the text you last searched for in a standard Cocoa application or "copied" with ⌘E. For example, if you just searched for some words in TextEdit, then decide you want to repeat that search on the web, you can run 'Current Find Clipboard ⇥ Find With… ⇥ DuckDuckGo'.&lt;/p&gt;
 &lt;h3&gt;Action Objects&lt;/h3&gt;
 &lt;p&gt;By default, the Clipboard plugin adds a serious of 'action objects' which can be run from Quicksilver's 1st pane, or more usefully, as triggers. These are:&lt;/p&gt;
 &lt;ul&gt;
