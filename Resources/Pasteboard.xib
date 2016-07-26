@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1090" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9060"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="QSPasteboardController">
@@ -27,12 +27,10 @@
                     <customView id="111" customClass="QSBackgroundView">
                         <rect key="frame" x="0.0" y="398" width="256" height="18"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <animations/>
                     </customView>
                     <textField verticalHuggingPriority="750" id="87">
                         <rect key="frame" x="51" y="401" width="153" height="12"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                        <animations/>
                         <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" state="on" alignment="left" title="Clipboard History" id="185">
                             <font key="font" metaFont="systemBold" size="10"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -49,7 +47,6 @@
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="36" id="19" customClass="QSTableView">
                                     <rect key="frame" x="0.0" y="0.0" width="256" height="38"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <animations/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <tableViewGridLines key="gridStyleMask" horizontal="YES"/>
@@ -87,30 +84,24 @@
                                     </connections>
                                 </tableView>
                             </subviews>
-                            <animations/>
                             <color key="backgroundColor" red="0.96370959" green="0.95328312999999998" blue="0.86656146999999994" alpha="1" colorSpace="calibratedRGB"/>
                         </clipView>
-                        <animations/>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" controlSize="small" horizontal="YES" id="193">
                             <rect key="frame" x="-100" y="-100" width="232" height="11"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <animations/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" controlSize="small" horizontal="NO" id="194">
                             <rect key="frame" x="-22" y="1" width="11" height="379"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <animations/>
                         </scroller>
                     </scrollView>
                     <customView id="112" customClass="QSBackgroundView">
                         <rect key="frame" x="0.0" y="0.0" width="261" height="16"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                        <animations/>
                     </customView>
                     <button hidden="YES" id="113">
                         <rect key="frame" x="198" y="-1" width="35" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
-                        <animations/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="CopyBottom" imagePosition="only" alignment="center" enabled="NO" inset="2" id="187">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="label"/>
@@ -119,7 +110,6 @@
                     <button hidden="YES" id="115">
                         <rect key="frame" x="200" y="399" width="33" height="12"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <animations/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="PasteTop" imagePosition="only" alignment="center" enabled="NO" inset="2" id="189">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="label"/>
@@ -128,12 +118,10 @@
                     <customView id="83" customClass="BLTRResizeView">
                         <rect key="frame" x="240" y="0.0" width="16" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
-                        <animations/>
                     </customView>
                     <button hidden="YES" id="114">
                         <rect key="frame" x="179" y="397" width="31" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <animations/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="CopyTop" imagePosition="only" alignment="center" enabled="NO" inset="2" id="188">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="label"/>
@@ -142,7 +130,6 @@
                     <button id="95" customClass="QSMenuButton">
                         <rect key="frame" x="229" y="397" width="28" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <animations/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Action" imagePosition="only" alignment="center" alternateImage="Action_p" inset="2" id="186">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -154,7 +141,6 @@
                     <button id="182">
                         <rect key="frame" x="2" y="2" width="27" height="13"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <animations/>
                         <buttonCell key="cell" type="bevel" title="Clear" bezelStyle="regularSquare" alignment="center" controlSize="small" inset="2" id="190">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="miniSystem"/>
@@ -164,7 +150,6 @@
                         </connections>
                     </button>
                 </subviews>
-                <animations/>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="64"/>
