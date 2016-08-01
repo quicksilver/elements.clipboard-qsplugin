@@ -279,7 +279,7 @@
 
     [[pasteboardHistoryTable tableColumnWithIdentifier: @"sequence"] setDataCell:newCell];
 
-    [(QSTableView *)pasteboardHistoryTable setDraggingDelegate:[self window]];
+    [pasteboardHistoryTable setDraggingDelegate:[self window]];
 
     if ([pasteboardHistoryArray count]) {
 		NSPasteboard *pboard = [NSPasteboard generalPasteboard];

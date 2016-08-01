@@ -23,7 +23,7 @@ typedef enum {
     NSMutableArray *pasteboardCacheArray;
 		
     IBOutlet NSMatrix *pasteboardHistoryMatrix;
-    IBOutlet NSTableView *pasteboardHistoryTable;
+    IBOutlet QSTableView *pasteboardHistoryTable;
     IBOutlet QSObjectView *pasteboardItemView;
     IBOutlet NSWindow *pasteboardProxyWindow;
     
