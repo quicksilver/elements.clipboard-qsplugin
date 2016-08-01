@@ -413,6 +413,8 @@
             case QSPasteboardStackMode:
                 [pasteboardCacheArray insertObject:newObject atIndex:0];
                 break;
+			default:
+				break;
         }
     }
 
@@ -607,7 +609,7 @@
 	//NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
 	if ([anItem action] == @selector(setMode:) ) {
-		[anItem setState:[anItem tag] == (NSInteger)mode];
+		[anItem setState:([anItem tag] == mode)];
 		return YES;
 	}
 	if ([anItem action] == @selector(toggleAdjustRows:) ) {

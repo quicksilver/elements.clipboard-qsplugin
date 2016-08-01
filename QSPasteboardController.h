@@ -1,12 +1,12 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, QSPasteboardMode) {
 	QSPasteboardHistoryMode = 1, // Global pasteboard history
 	QSPasteboardStoreMode = 2, // numbered storage bins
 	QSPasteboardQueueMode = 3, // FIFO Cycling
 	QSPasteboardStackMode = 4 // LIFO Cycling
-} QSPasteboardMode;
+};
 
 @class QSObjectView;
 
@@ -38,7 +38,7 @@ typedef enum {
     NSInteger maxPasteboardCount;
     BOOL captureHistory;
     NSArray *ignoredApps;
-	NSUInteger mode;
+	QSPasteboardMode mode;
     dispatch_queue_t pasteboardQueue;
 }
 
