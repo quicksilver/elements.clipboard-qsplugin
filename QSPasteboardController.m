@@ -203,15 +203,9 @@
 }
 
 - (void)pasteItem:(id)sender {
-    //  activateFrontWindowOfApplication
-    //supressCapture = YES;
-    //[[NSWorkspace sharedWorkspace] activateFrontWindowOfApplication:
-    //  [[NSWorkspace sharedWorkspace] activeApplication]];
-    //[[NSApp keyWindow] orderOut:self];
     [[self window] resignKeyWindowNow];
     asPlainText = (([[NSApp currentEvent] modifierFlags] & NSDeviceIndependentModifierFlagsMask) == NSAlternateKeyMask);
 
-    //[NSApp deactivate];
 	[self qsPaste:nil];
 
 	[self hideWindow:sender];
