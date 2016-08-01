@@ -8,6 +8,12 @@
 
 @end
 
+@interface QSPasteboardController () <QSTableViewDataSource, QSTableViewDelegate> {
+	NSIndexSet *_draggedRows;
+}
+
+@end
+
 @implementation QSPasteboardController
 
 @dynamic window;
@@ -661,23 +667,27 @@
 		[aCell setState:NSOffState];
     }
 }
-static NSInteger _draggedRow = -1;
-- (BOOL)tableView:(NSTableView *)tv writeRows:(NSArray*)rows toPasteboard:(NSPasteboard*)pboard {
 
-	_draggedRow = [[rows objectAtIndex:0] integerValue];
+- (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard {
+	if ([rowIndexes count] > 1) return NO;
 
-	if ([[self.currentArray objectAtIndex:_draggedRow] isKindOfClass:[QSNullObject class]]) return NO;
-    [[self.currentArray objectAtIndex:[[rows objectAtIndex:0] integerValue]]putOnPasteboard:pboard includeDataForTypes:nil];
-    return YES;
+	NSArray *draggedObjects = [self.currentArray objectsAtIndexes:rowIndexes];
+	if ([draggedObjects[0] isKindOfClass:[QSNullObject class]]) return NO;
+
+	_draggedRows = rowIndexes;
+
+	[draggedObjects[0] putOnPasteboard:pboard includeDataForTypes:nil];
+	return YES;
 }
-- (NSDragOperation) tableView:(NSTableView *)tableView validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)operation {
+
+- (NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)operation {
 	switch (mode) {
 		case QSPasteboardHistoryMode:
 			if ([info draggingSource] == tableView) return NSDragOperationNone;
 			[tableView setDropRow:0 dropOperation:NSTableViewDropAbove];
 			break;
 		case QSPasteboardStoreMode:
-			if (operation == NSTableViewDropAbove || row == _draggedRow) return NSDragOperationNone;
+			if (operation == NSTableViewDropAbove || [_draggedRows containsIndex:row]) return NSDragOperationNone;
 			break;
 		case QSPasteboardQueueMode:
 		case QSPasteboardStackMode:
@@ -694,30 +704,34 @@ static NSInteger _draggedRow = -1;
 }
 - (BOOL)tableView:(NSTableView *)tableView acceptDrop:(id <NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)operation {
 
-	QSObject *object = nil;
+	BOOL isSelfDrag = ([info draggingSource] == tableView); // Are we currently dragging objects from our contents
+	NSArray <QSObject *> *objects = nil;
 
-	if ([info draggingSource] == tableView)
-		object = [self.currentArray objectAtIndex:_draggedRow];
+	if (isSelfDrag)
+		objects = [self.currentArray objectsAtIndexes:_draggedRows];
 	else
-		object = [QSObject objectWithPasteboard:[info draggingPasteboard]];
+		/* FIXME: What actually happens if you multi-drag something else in here ? */
+		objects = @[[QSObject objectWithPasteboard:[info draggingPasteboard]]];
 	switch (mode) {
 		case QSPasteboardHistoryMode:
-			if ([info draggingSource] != tableView)
-				[object putOnPasteboard:[NSPasteboard generalPasteboard]];
+			if ([info draggingSource] != tableView) {
+				for (QSObject *object in objects) {
+					[object putOnPasteboard:[NSPasteboard generalPasteboard]];
+				}
+			}
 			break;
 		case QSPasteboardStoreMode:
+			[pasteboardStoreArray replaceObjectAtIndex:row withObject:objects[0]];
 
-			[pasteboardStoreArray replaceObjectAtIndex:row withObject:object];
-
-			if ([info draggingSource] == tableView)
-				[pasteboardStoreArray replaceObjectAtIndex:_draggedRow withObject:[QSNullObject nullObject]];
+			if (isSelfDrag)
+				[pasteboardStoreArray replaceObjectAtIndex:[_draggedRows firstIndex] withObject:[QSNullObject nullObject]];
             break;
 		case QSPasteboardQueueMode:
 		case QSPasteboardStackMode:
-			if ([info draggingSource] == tableView)
-				[pasteboardCacheArray moveIndex:_draggedRow toIndex:row];
+			if (isSelfDrag)
+				[pasteboardCacheArray moveIndex:[_draggedRows firstIndex] toIndex:row];
 			else
-				[pasteboardCacheArray insertObject:object atIndex:row];
+				[pasteboardCacheArray insertObjectsFromArray:objects atIndex:row];
 			break;
 		default:
 			break;
