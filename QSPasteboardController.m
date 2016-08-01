@@ -285,7 +285,6 @@
 
     [[pasteboardHistoryTable tableColumnWithIdentifier: @"sequence"] setDataCell:newCell];
 
-    [pasteboardHistoryTable setDraggingDelegate:[self window]];
 
     if ([pasteboardHistoryArray count]) {
 		NSPasteboard *pboard = [NSPasteboard generalPasteboard];
@@ -666,6 +665,14 @@
         [aCell setRepresentedObject:[self.currentArray objectAtIndex:rowIndex]];
 		[aCell setState:NSOffState];
     }
+}
+
+- (void)tableView:(NSTableView *)tableView draggingSession:(NSDraggingSession *)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation {
+	NSRect windowScreenRect =[self.window convertRectToScreen:self.window.frame];
+	if (!NSPointInRect(screenPoint, windowScreenRect)) {
+		// We dropped outside our window, hide ourselves
+		[self hideWindow:self];
+	}
 }
 
 - (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard {
