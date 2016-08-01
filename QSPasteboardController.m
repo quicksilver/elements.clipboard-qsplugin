@@ -57,8 +57,7 @@
     return YES;
 }
 
--(BOOL)acceptsFirstResponder {
-    NSLog(@"accepting 1st resp");
+- (BOOL)acceptsFirstResponder {
     return YES;
 }
 
