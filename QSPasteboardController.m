@@ -424,7 +424,7 @@
     [pasteboardHistoryTable reloadData];
 
     if (recievingSelection) {
-        [pasteboardHistoryTable selectRowIndexes:0 byExtendingSelection:NO];
+        [pasteboardHistoryTable selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
         [pasteboardHistoryTable scrollRowToVisible:0];
     } else {
         NSUInteger row = [pasteboardHistoryTable selectedRow];
