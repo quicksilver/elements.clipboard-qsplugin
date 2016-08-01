@@ -10,6 +10,8 @@
 
 @implementation QSPasteboardController
 
+@dynamic window;
+
 + (void)initialize {
 	NSMenu *modulesMenu = [[[NSApp mainMenu] itemWithTag:128] submenu];
 	NSMenuItem *modMenuItem = [modulesMenu addItemWithTitle:@"Clipboard History" action:@selector(showClipboard:) keyEquivalent:@"l"];
@@ -39,7 +41,16 @@
         }
         [defaults setObject:tempArray forKey:@"clipboardIgnoreApps"];
     }
-    
+
+}
+
++ (QSPasteboardController *)sharedInstance {
+	static id _sharedInstance;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_sharedInstance = [[[self class] allocWithZone:nil] init];
+	});
+	return _sharedInstance;
 }
 
 - (BOOL)acceptsFirstMouse:(NSEvent *)theEvent {
@@ -58,20 +69,20 @@
 + (void)showClipboardHidden:(id)sender
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	if ([defaults boolForKey:@"QSPasteboardHistoryIsVisible"] || [(QSDockingWindow *)[[self sharedInstance] window] isDocked]) {
-		[(QSDockingWindow *)[[self sharedInstance] window] orderFrontHidden:sender];
+	if ([defaults boolForKey:@"QSPasteboardHistoryIsVisible"] || [[[self sharedInstance] window] isDocked]) {
+		[[[self sharedInstance] window] orderFrontHidden:sender];
 	}
 }
 
 + (void)showClipboard:(id)sender {
-	[(QSDockingWindow *)[[self sharedInstance] window] toggle:sender];
-	
+	[[[self sharedInstance] window] toggle:sender];
+
 }
 
 // saves the state of the shelf window when Quicksilver goes to quit (used on next QS launch - see +loadPlugIn)
 +(void)saveVisibilityState:(NSNotification *)notif {
     if ([[notif object] isEqualToString:@"QSQuicksilverWillQuitEvent"]) {
-		BOOL visible = ![(QSDockingWindow *)[[self sharedInstance] window] hidden];
+		BOOL visible = ![[[self sharedInstance] window] hidden];
         [[NSUserDefaults standardUserDefaults] setBool:visible forKey:@"QSPasteboardHistoryIsVisible"];
         if ([[NSUserDefaults standardUserDefaults] boolForKey:kDiscardPasteboardHistoryOnQuit]) {
             // make sure any existing history is overwritten
@@ -80,16 +91,6 @@
         }
     }
 }
-
-+ (id)sharedInstance {
-    static id _sharedInstance;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _sharedInstance = [[[self class] allocWithZone:nil] init];
-    });
-    return _sharedInstance;
-}
-
 
 - (void)clearStore {
 	[pasteboardStoreArray removeAllObjects];
@@ -151,22 +152,22 @@
 
 - (IBAction)showHistory:(id)sender {
 	[self switchToMode:QSPasteboardHistoryMode];
-	[(QSDockingWindow *)[self window] show:sender];
+	[[self window] show:sender];
 }
 
 - (IBAction)showStore:(id)sender {
 	[self switchToMode:QSPasteboardStoreMode];
-	[(QSDockingWindow *)[self window] show:sender];
+	[[self window] show:sender];
 }
 
 - (IBAction)showQueue:(id)sender {
 	[self switchToMode:QSPasteboardQueueMode];
-	[(QSDockingWindow *)[self window] show:sender];
+	[[self window] show:sender];
 }
 
 - (IBAction)showStack:(id)sender {
 	[self switchToMode:QSPasteboardStackMode];
-	[(QSDockingWindow *)[self window] show:sender];
+	[[self window] show:sender];
 }
 
 // used for the 'clip store copy' objects (see the plist)
@@ -201,7 +202,7 @@
     //[[NSWorkspace sharedWorkspace] activateFrontWindowOfApplication:
     //  [[NSWorkspace sharedWorkspace] activeApplication]];
     //[[NSApp keyWindow] orderOut:self];
-    [(QSDockingWindow *)[self window] resignKeyWindowNow];
+    [[self window] resignKeyWindowNow];
     asPlainText = (([[NSApp currentEvent] modifierFlags] & NSDeviceIndependentModifierFlagsMask) == NSAlternateKeyMask);
     
     //[NSApp deactivate];
@@ -252,8 +253,8 @@
     [[self window] setLevel:27];
     [[self window] setHidesOnDeactivate:NO];
     [pasteboardHistoryArray makeObjectsPerformSelector:@selector(loadIcon)];
-    
-    [(QSDockingWindow *)[self window] setAutosaveName:@"QSPasteboardHistoryWindow"]; // should use the real methods to do this
+
+    [[self window] setAutosaveName:@"QSPasteboardHistoryWindow"]; // should use the real methods to do this
     NSCell *newCell = nil;
     
     //NSImageCell *imageCell = nil;
@@ -493,11 +494,11 @@
     
 }
 - (IBAction)hideWindow:(id)sender {
-	[(QSDockingWindow *)[self window] saveFrame];
-    if (![(QSDockingWindow *)[self window] isDocked] && [[NSUserDefaults standardUserDefaults] boolForKey:@"QSPasteboardController HideAfterPasting"]) {
+	[[self window] saveFrame];
+    if (![[self window] isDocked] && [[NSUserDefaults standardUserDefaults] boolForKey:@"QSPasteboardController HideAfterPasting"]) {
 		[[self window] orderOut:self];
     } else {
-        [(QSDockingWindow *)[self window] hide:self];
+        [[self window] hide:self];
     }
 }
 - (id)selectedObject {

@@ -1,5 +1,6 @@
 
 #import <Foundation/Foundation.h>
+
 typedef enum {
 	QSPasteboardHistoryMode = 1, // Global pasteboard history
 	QSPasteboardStoreMode = 2, // numbered storage bins
@@ -42,6 +43,9 @@ typedef enum {
 }
 
 @property NSMutableArray *currentArray;
+@property (retain) QSDockingWindow *window;
+
++ (QSPasteboardController *)sharedInstance; // Explicit because of the -window redeclaration above
 
 + (void)showClipboard:(id)sender;
 
@@ -60,7 +64,7 @@ typedef enum {
 
 - (IBAction)showPreferences:(id)sender;
 
-+ (id)sharedInstance;
+
 
 - (IBAction)hideWindow:(id)sender;
 @end
