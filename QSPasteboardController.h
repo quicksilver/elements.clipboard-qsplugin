@@ -1,11 +1,12 @@
 
 #import <Foundation/Foundation.h>
-typedef enum {
+
+typedef NS_ENUM(NSUInteger, QSPasteboardMode) {
 	QSPasteboardHistoryMode = 1, // Global pasteboard history
 	QSPasteboardStoreMode = 2, // numbered storage bins
 	QSPasteboardQueueMode = 3, // FIFO Cycling
 	QSPasteboardStackMode = 4 // LIFO Cycling
-} QSPasteboardMode;
+};
 
 @class QSObjectView;
 
@@ -22,7 +23,7 @@ typedef enum {
     NSMutableArray *pasteboardCacheArray;
 		
     IBOutlet NSMatrix *pasteboardHistoryMatrix;
-    IBOutlet NSTableView *pasteboardHistoryTable;
+    IBOutlet QSTableView *pasteboardHistoryTable;
     IBOutlet QSObjectView *pasteboardItemView;
     IBOutlet NSWindow *pasteboardProxyWindow;
     
@@ -37,11 +38,14 @@ typedef enum {
     NSInteger maxPasteboardCount;
     BOOL captureHistory;
     NSArray *ignoredApps;
-	NSUInteger mode;
+	QSPasteboardMode mode;
     dispatch_queue_t pasteboardQueue;
 }
 
 @property NSMutableArray *currentArray;
+@property (retain) QSDockingWindow *window;
+
++ (QSPasteboardController *)sharedInstance; // Explicit because of the -window redeclaration above
 
 + (void)showClipboard:(id)sender;
 
@@ -60,7 +64,7 @@ typedef enum {
 
 - (IBAction)showPreferences:(id)sender;
 
-+ (id)sharedInstance;
+
 
 - (IBAction)hideWindow:(id)sender;
 @end

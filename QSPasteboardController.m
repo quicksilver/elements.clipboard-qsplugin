@@ -8,13 +8,21 @@
 
 @end
 
+@interface QSPasteboardController () <QSTableViewDataSource, QSTableViewDelegate> {
+	NSIndexSet *_draggedRows;
+}
+
+@end
+
 @implementation QSPasteboardController
+
+@dynamic window;
 
 + (void)initialize {
 	NSMenu *modulesMenu = [[[NSApp mainMenu] itemWithTag:128] submenu];
 	NSMenuItem *modMenuItem = [modulesMenu addItemWithTitle:@"Clipboard History" action:@selector(showClipboard:) keyEquivalent:@"l"];
 	[modMenuItem setTarget:self];
-	
+
 	[QSPasteboardMonitor sharedInstance];
     NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
 	if ([defaults boolForKey:kCapturePasteboardHistory])
@@ -22,12 +30,12 @@
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self selector:@selector(saveVisibilityState:) name:@"QSEventNotification" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showClipboardHidden:) name:@"QSApplicationDidFinishLaunchingNotification" object:nil];
-    
+
 	NSImage *image = [[NSImage alloc] initByReferencingFile:
                        [[NSBundle bundleForClass:[QSPasteboardController class]]pathForImageResource:@"Clipboard"]];
 	[image shrinkToSize:QSSize16];
 	[modMenuItem setImage:image];
-    
+
     // set up the default apps to ignore clipboard content from: 1Password, Keychain and Wallet
     if (![defaults objectForKey:@"clipboardIgnoreApps"]) {
         NSArray *apps = [NSArray arrayWithObjects:@"com.agilebits.onepassword-osx",@"com.acrylic.wallet",@"com.apple.keychainaccess",@"com.microsoft.RDC",nil];
@@ -39,15 +47,23 @@
         }
         [defaults setObject:tempArray forKey:@"clipboardIgnoreApps"];
     }
-    
+
+}
+
++ (QSPasteboardController *)sharedInstance {
+	static id _sharedInstance;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		_sharedInstance = [[[self class] allocWithZone:nil] init];
+	});
+	return _sharedInstance;
 }
 
 - (BOOL)acceptsFirstMouse:(NSEvent *)theEvent {
     return YES;
 }
 
--(BOOL)acceptsFirstResponder {
-    NSLog(@"accepting 1st resp");
+- (BOOL)acceptsFirstResponder {
     return YES;
 }
 
@@ -58,20 +74,20 @@
 + (void)showClipboardHidden:(id)sender
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	if ([defaults boolForKey:@"QSPasteboardHistoryIsVisible"] || [(QSDockingWindow *)[[self sharedInstance] window] isDocked]) {
-		[(QSDockingWindow *)[[self sharedInstance] window] orderFrontHidden:sender];
+	if ([defaults boolForKey:@"QSPasteboardHistoryIsVisible"] || [[[self sharedInstance] window] isDocked]) {
+		[[[self sharedInstance] window] orderFrontHidden:sender];
 	}
 }
 
 + (void)showClipboard:(id)sender {
-	[(QSDockingWindow *)[[self sharedInstance] window] toggle:sender];
-	
+	[[[self sharedInstance] window] toggle:sender];
+
 }
 
 // saves the state of the shelf window when Quicksilver goes to quit (used on next QS launch - see +loadPlugIn)
 +(void)saveVisibilityState:(NSNotification *)notif {
     if ([[notif object] isEqualToString:@"QSQuicksilverWillQuitEvent"]) {
-		BOOL visible = ![(QSDockingWindow *)[[self sharedInstance] window] hidden];
+		BOOL visible = ![[[self sharedInstance] window] hidden];
         [[NSUserDefaults standardUserDefaults] setBool:visible forKey:@"QSPasteboardHistoryIsVisible"];
         if ([[NSUserDefaults standardUserDefaults] boolForKey:kDiscardPasteboardHistoryOnQuit]) {
             // make sure any existing history is overwritten
@@ -81,61 +97,52 @@
     }
 }
 
-+ (id)sharedInstance {
-    static id _sharedInstance;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _sharedInstance = [[[self class] allocWithZone:nil] init];
-    });
-    return _sharedInstance;
-}
-
-
 - (void)clearStore {
 	[pasteboardStoreArray removeAllObjects];
 	for (NSInteger i = 0; i<10; i++) {
         [pasteboardStoreArray addObject:[QSNullObject nullObject]];
     };
 }
+
 - (id)init {
     if (self = [super initWithWindowNibName:@"Pasteboard" owner:self]) {
-		
+
         pasteboardHistoryArray = [[QSLibrarian sharedInstance] shelfNamed:@"QSPasteboardHistory"];
-		
+
 		self.currentArray = pasteboardHistoryArray;
 		mode = QSPasteboardHistoryMode;
 		pasteboardStoreArray = [[NSMutableArray alloc] init];
 		[self clearStore];
 		pasteboardCacheArray = [[NSMutableArray alloc] init];
-		
+
 		// ***warning   * if pasteboard is empty, put last copyied item onto it
-		
+
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pasteboardChanged:) name:QSPasteboardDidChangeNotification object:nil];
-		
-		
+
+
 		if (defaultBool(@"QSClipboardModule/EnableHotKeys") ) {
 			QSHotKeyEvent *hotKey;
-            
+
 			hotKey = (QSHotKeyEvent *)[QSHotKeyEvent getHotKeyForKeyCode:37 character:[@"L" characterAtIndex:0]
                                                            modifierFlags:NSCommandKeyMask | NSControlKeyMask];
 			[hotKey setTarget:self selector:@selector(showHistory:)];
 			[hotKey setEnabled:YES];
-			
+
 			hotKey = (QSHotKeyEvent *)[QSHotKeyEvent getHotKeyForKeyCode:37 character:[@"L" characterAtIndex:0]
                                                            modifierFlags:NSCommandKeyMask | NSShiftKeyMask | NSAlternateKeyMask];
 			[hotKey setTarget:self selector:@selector(showStore:)];
 			[hotKey setEnabled:YES];
-			
+
 			hotKey = (QSHotKeyEvent *)[QSHotKeyEvent getHotKeyForKeyCode:37 character:[@"L" characterAtIndex:0]
                                                            modifierFlags:NSCommandKeyMask | NSControlKeyMask | NSAlternateKeyMask];
 			[hotKey setTarget:self selector:@selector(showQueue:)];
 			[hotKey setEnabled:YES];
-			
+
 			hotKey = (QSHotKeyEvent *)[QSHotKeyEvent getHotKeyForKeyCode:37 character:[@"L" characterAtIndex:0]
                                                            modifierFlags:NSCommandKeyMask | NSControlKeyMask | NSShiftKeyMask];
 			[hotKey setTarget:self selector:@selector(showStack:)];
 			[hotKey setEnabled:YES];
-			
+
 			hotKey = (QSHotKeyEvent *)[QSHotKeyEvent getHotKeyForKeyCode:9 character:[@"V" characterAtIndex:0]
                                                            modifierFlags:NSCommandKeyMask | NSControlKeyMask];
 			[hotKey setTarget:self selector:@selector(qsPaste:)];
@@ -151,22 +158,22 @@
 
 - (IBAction)showHistory:(id)sender {
 	[self switchToMode:QSPasteboardHistoryMode];
-	[(QSDockingWindow *)[self window] show:sender];
+	[[self window] show:sender];
 }
 
 - (IBAction)showStore:(id)sender {
 	[self switchToMode:QSPasteboardStoreMode];
-	[(QSDockingWindow *)[self window] show:sender];
+	[[self window] show:sender];
 }
 
 - (IBAction)showQueue:(id)sender {
 	[self switchToMode:QSPasteboardQueueMode];
-	[(QSDockingWindow *)[self window] show:sender];
+	[[self window] show:sender];
 }
 
 - (IBAction)showStack:(id)sender {
 	[self switchToMode:QSPasteboardStackMode];
-	[(QSDockingWindow *)[self window] show:sender];
+	[[self window] show:sender];
 }
 
 // used for the 'clip store copy' objects (see the plist)
@@ -183,12 +190,12 @@
 
 - (void)pasteNumber:(NSUInteger)number plainText:(BOOL)plainText {
     NSIndexSet *rowSet = [NSIndexSet indexSetWithIndex:number];
-    
+
     if (mode == QSPasteboardStoreMode && plainText == YES) {
         [pasteboardStoreArray replaceObjectAtIndex:number withObject:[QSObject objectWithPasteboard:[NSPasteboard generalPasteboard]]];
         [pasteboardHistoryTable selectRowIndexes:rowSet byExtendingSelection:NO];
     } else {
-        
+
         [pasteboardHistoryTable selectRowIndexes:rowSet byExtendingSelection:NO];
         [self pasteItem:self];
         [pasteboardHistoryTable reloadData];
@@ -196,22 +203,16 @@
 }
 
 - (void)pasteItem:(id)sender {
-    //  activateFrontWindowOfApplication
-    //supressCapture = YES;
-    //[[NSWorkspace sharedWorkspace] activateFrontWindowOfApplication:
-    //  [[NSWorkspace sharedWorkspace] activeApplication]];
-    //[[NSApp keyWindow] orderOut:self];
-    [(QSDockingWindow *)[self window] resignKeyWindowNow];
+    [[self window] resignKeyWindowNow];
     asPlainText = (([[NSApp currentEvent] modifierFlags] & NSDeviceIndependentModifierFlagsMask) == NSAlternateKeyMask);
-    
-    //[NSApp deactivate];
+
 	[self qsPaste:nil];
-	
+
 	[self hideWindow:sender];
-    
+
     [[(QSController *)[NSApp delegate] interfaceController] hideWindows:self];
-    
-    
+
+
 	// ***warning   * the clipboard should be restored
 }
 
@@ -226,7 +227,7 @@
 		case QSPasteboardQueueMode:
 		case QSPasteboardStackMode:
 			if ([pasteboardCacheArray count]) {
-				
+
 				id object = (sender?[pasteboardCacheArray objectAtIndex:0] :[self selectedObject]);
 				supressCapture = YES;
                 [self copyToClipboard:object];
@@ -237,13 +238,13 @@
 				}
 			} else {
 				NSBeep();
-				
+
 			}
 			break;
 		default:
 			break;
 	}
-	
+
 }
 
 - (void)awakeFromNib {
@@ -252,15 +253,15 @@
     [[self window] setLevel:27];
     [[self window] setHidesOnDeactivate:NO];
     [pasteboardHistoryArray makeObjectsPerformSelector:@selector(loadIcon)];
-    
-    [(QSDockingWindow *)[self window] setAutosaveName:@"QSPasteboardHistoryWindow"]; // should use the real methods to do this
+
+    [[self window] setAutosaveName:@"QSPasteboardHistoryWindow"]; // should use the real methods to do this
     NSCell *newCell = nil;
-    
+
     //NSImageCell *imageCell = nil;
     [pasteboardHistoryTable setVerticalMotionCanBeginDrag: TRUE];
-	
+
 	NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-	
+
 	CGFloat rowHeight = [def doubleForKey:@"QSPasteboardRowHeight"];
 	adjustRowsToFit = [def boolForKey:@"QSPasteboardAdjustRowHeight"];
     [pasteboardHistoryTable setRowHeight:rowHeight?rowHeight:36];
@@ -268,57 +269,56 @@
     [pasteboardHistoryTable setTarget:self];
     //[pasteboardHistoryTable setAction:@selector(tableAction:)];
     [pasteboardHistoryTable setDoubleAction:@selector(pasteItem:)];
-    
+
     [pasteboardHistoryTable setTarget:self];
-    
+
     newCell = [[QSObjectCell alloc] init];
     [[pasteboardHistoryTable tableColumnWithIdentifier: @"object"] setDataCell:newCell];
-    
+
     newCell = [[QSPasteboardAccessoryCell alloc] init];
-    
+
     [[pasteboardHistoryTable tableColumnWithIdentifier: @"sequence"] setDataCell:newCell];
-    
-    [(QSTableView *)pasteboardHistoryTable setDraggingDelegate:[self window]];
-    
+
+
     if ([pasteboardHistoryArray count]) {
 		NSPasteboard *pboard = [NSPasteboard generalPasteboard];
 		if (![[pboard types] count]) {
 			[[pasteboardHistoryArray objectAtIndex:0] putOnPasteboard:pboard];
 		}
 		[pasteboardItemView setObjectValue:[pasteboardHistoryArray objectAtIndex:0]];
-		
+
 	}
-	
-	
+
+
 	[pasteboardHistoryTable bind:@"backgroundColor"
                         toObject:[NSUserDefaultsController sharedUserDefaultsController]
                      withKeyPath:@"values.QSAppearance3B"
                          options:[NSDictionary dictionaryWithObject:NSUnarchiveFromDataTransformerName
                                                              forKey:@"NSValueTransformerName"]];
-	
-	
-	
+
+
+
 	[pasteboardHistoryTable bind:@"highlightColor"
                         toObject:[NSUserDefaultsController sharedUserDefaultsController]
                      withKeyPath:@"values.QSAppearance3A"
                          options:[NSDictionary dictionaryWithObject:NSUnarchiveFromDataTransformerName
                                                              forKey:@"NSValueTransformerName"]];
-	
-	
+
+
 	[[[pasteboardHistoryTable tableColumnWithIdentifier:@"object"] dataCell] bind:@"textColor"
                                                                          toObject:[NSUserDefaultsController sharedUserDefaultsController]
                                                                       withKeyPath:@"values.QSAppearance3T"
                                                                           options:[NSDictionary dictionaryWithObject:NSUnarchiveFromDataTransformerName forKey:@"NSValueTransformerName"]];
-	
+
 	[[[pasteboardHistoryTable tableColumnWithIdentifier:@"sequence"] dataCell] bind:@"textColor"
                                                                            toObject:[NSUserDefaultsController sharedUserDefaultsController]
                                                                         withKeyPath:@"values.QSAppearance3T"
                                                                             options:[NSDictionary dictionaryWithObject:NSUnarchiveFromDataTransformerName forKey:@"NSValueTransformerName"]];
-	
-	
+
+
 	[pasteboardHistoryTable setGridColor:[[NSColor blackColor] colorWithAlphaComponent:0.1]];
-	
-	
+
+
 }
 
 
@@ -347,18 +347,18 @@
 - (void)handlePasteboardChanged:(NSNotification *)notif {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	if (! [defaults boolForKey:kCapturePasteboardHistory]) return;
-    
+
     // don't add the object to the clipboard if the user's whitelisted the app
     if ([[defaults arrayForKey:@"clipboardIgnoreApps"] containsObject:[[notif object] objectForKey:@"ActiveApp"]]) {
         return;
     }
-    
+
     NSInteger maxCount = [[NSUserDefaults standardUserDefaults] integerForKey:kCapturePasteboardHistoryCount];
 	// run through the pasteboard history, removing unused (over the max count) objects
 	while ((NSInteger)[pasteboardHistoryArray count] >maxCount) [pasteboardHistoryArray removeLastObject];
 	// get a new object from the general (system-wide) pasteboard
     QSObject *newObject = [QSObject objectWithPasteboard:[[notif object] objectForKey:@"Pasteboard"]];
-	
+
 	if (!newObject) {
         return;
     }
@@ -368,7 +368,7 @@
         [pasteboardHistoryArray removeObjectAtIndex:0];
         return;
     }
-    
+
     // check the string value of the objects to compare (the object's aren't necessarily the same if one has more pasteboard types
     // (e.g. RTF data) than the other)
     // receiving selection decides whether an existing object on the clipboard should be 'moved up' to the 0th position
@@ -387,7 +387,7 @@
         return NO;
     }];
     [pasteboardHistoryArray removeObjectsAtIndexes:objectsToRemove];
-    
+
 #warning Fixme: writing pasteboard files to disk
     // ******* Commented out code for writing clipboard data to file. Needs to be implemented properly at some point
     // If the object's entirely new to the clipboard, we need to add some info to it
@@ -409,7 +409,7 @@
     //			[newObject writeToFile:path];
     //		}
     [pasteboardHistoryArray insertObject:newObject atIndex:0];
-    
+
     if (!supressCapture) {
         switch (mode) {
             case QSPasteboardQueueMode:
@@ -418,16 +418,18 @@
             case QSPasteboardStackMode:
                 [pasteboardCacheArray insertObject:newObject atIndex:0];
                 break;
+			default:
+				break;
         }
     }
-    
+
     supressCapture = NO;
-    
-    
+
+
     [pasteboardHistoryTable reloadData];
-    
+
     if (recievingSelection) {
-        [pasteboardHistoryTable selectRowIndexes:0 byExtendingSelection:NO];
+        [pasteboardHistoryTable selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
         [pasteboardHistoryTable scrollRowToVisible:0];
     } else {
         NSUInteger row = [pasteboardHistoryTable selectedRow];
@@ -468,7 +470,7 @@
 
 
 - (void)deleteBackward:(id)sender {
-	
+
 	NSInteger index = [pasteboardHistoryTable selectedRow];
 	switch (mode) {
 		case QSPasteboardHistoryMode:
@@ -482,28 +484,28 @@
 			break;
 		case QSPasteboardStoreMode:
 			[pasteboardStoreArray replaceObjectAtIndex:index withObject:[QSNullObject nullObject]];
-			
+
 			break;
 		case QSPasteboardQueueMode:
 		case QSPasteboardStackMode:
-			
+
 			[pasteboardCacheArray removeObjectAtIndex:index];
 		default:
 			break;
 	}
 	[pasteboardHistoryTable reloadData];
-	
+
 }
 
 - (void)tableAction:(id)sender {
-    
+
 }
 - (IBAction)hideWindow:(id)sender {
-	[(QSDockingWindow *)[self window] saveFrame];
-    if (![(QSDockingWindow *)[self window] isDocked] && [[NSUserDefaults standardUserDefaults] boolForKey:@"QSPasteboardController HideAfterPasting"]) {
+	[[self window] saveFrame];
+    if (![[self window] isDocked] && [[NSUserDefaults standardUserDefaults] boolForKey:@"QSPasteboardController HideAfterPasting"]) {
 		[[self window] orderOut:self];
     } else {
-        [(QSDockingWindow *)[self window] hide:self];
+        [[self window] hide:self];
     }
 }
 - (id)selectedObject {
@@ -564,7 +566,7 @@
 	adjustRowsToFit = !adjustRowsToFit;
 	if (adjustRowsToFit) [self adjustRowHeight];
 	[[NSUserDefaults standardUserDefaults] setBool:adjustRowsToFit forKey:@"QSPasteboardAdjustRowHeight"];
-	
+
 }
 
 - (IBAction)showPreferences:(id)sender {
@@ -583,7 +585,7 @@
 			self.currentArray = pasteboardHistoryArray;
 			break;
 		case QSPasteboardStoreMode:
-			
+
 			[titleField setStringValue:@"Clipboard Storage"];
 			self.currentArray = pasteboardStoreArray;
 			break;
@@ -610,16 +612,16 @@
 
 - (BOOL)validateMenuItem:(NSMenuItem*)anItem {
 	//NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	
+
 	if ([anItem action] == @selector(setMode:) ) {
-		[anItem setState:[anItem tag] == (NSInteger)mode];
+		[anItem setState:([anItem tag] == mode)];
 		return YES;
 	}
 	if ([anItem action] == @selector(toggleAdjustRows:) ) {
 		[anItem setState:adjustRowsToFit];
 		return YES;
 	}
-	
+
 	return YES;
 }
 
@@ -643,7 +645,7 @@
             if (rowIndex<9) return [NSNumber numberWithInteger:rowIndex+1];
         }
     }
-	
+
 	//	if ([[aTableColumn identifier] isEqualToString:@"source"]) {
 	//        NSString *source = [[pasteboardHistoryArray objectAtIndex:rowIndex] objectForKey:kQSObjectSource];
 	//        if (!source) source = @"Unknown";
@@ -653,7 +655,7 @@
 	//        return [[pasteboardHistoryArray objectAtIndex:rowIndex] name];
 	//    if ([[aTableColumn identifier] isEqualToString:@"date"])
 	//        return [NSDate dateWithTimeIntervalSinceReferenceDate:[[[pasteboardHistoryArray objectAtIndex:rowIndex] objectForKey:kQSObjectSource] floatValue]];
-	
+
     return nil;
 }
 - (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
@@ -664,23 +666,35 @@
 		[aCell setState:NSOffState];
     }
 }
-static NSInteger _draggedRow = -1;
-- (BOOL)tableView:(NSTableView *)tv writeRows:(NSArray*)rows toPasteboard:(NSPasteboard*)pboard {
-	
-	_draggedRow = [[rows objectAtIndex:0] integerValue];
-	
-	if ([[self.currentArray objectAtIndex:_draggedRow] isKindOfClass:[QSNullObject class]]) return NO;
-    [[self.currentArray objectAtIndex:[[rows objectAtIndex:0] integerValue]]putOnPasteboard:pboard includeDataForTypes:nil];
-    return YES;
+
+- (void)tableView:(NSTableView *)tableView draggingSession:(NSDraggingSession *)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation {
+	NSRect windowScreenRect =[self.window convertRectToScreen:self.window.frame];
+	if (!NSPointInRect(screenPoint, windowScreenRect)) {
+		// We dropped outside our window, hide ourselves
+		[self hideWindow:self];
+	}
 }
-- (NSDragOperation) tableView:(NSTableView *)tableView validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)operation {
+
+- (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard {
+	if ([rowIndexes count] > 1) return NO;
+
+	NSArray *draggedObjects = [self.currentArray objectsAtIndexes:rowIndexes];
+	if ([draggedObjects[0] isKindOfClass:[QSNullObject class]]) return NO;
+
+	_draggedRows = rowIndexes;
+
+	[draggedObjects[0] putOnPasteboard:pboard includeDataForTypes:nil];
+	return YES;
+}
+
+- (NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)operation {
 	switch (mode) {
 		case QSPasteboardHistoryMode:
 			if ([info draggingSource] == tableView) return NSDragOperationNone;
 			[tableView setDropRow:0 dropOperation:NSTableViewDropAbove];
 			break;
 		case QSPasteboardStoreMode:
-			if (operation == NSTableViewDropAbove || row == _draggedRow) return NSDragOperationNone;
+			if (operation == NSTableViewDropAbove || [_draggedRows containsIndex:row]) return NSDragOperationNone;
 			break;
 		case QSPasteboardQueueMode:
 		case QSPasteboardStackMode:
@@ -689,45 +703,49 @@ static NSInteger _draggedRow = -1;
 		default:
 			break;
 	}
-	
-	
+
+
     if ([info draggingSource] == tableView)
 		return NSDragOperationMove;
 	return NSDragOperationCopy;
 }
 - (BOOL)tableView:(NSTableView *)tableView acceptDrop:(id <NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)operation {
-	
-	QSObject *object = nil;
-	
-	if ([info draggingSource] == tableView)
-		object = [self.currentArray objectAtIndex:_draggedRow];
+
+	BOOL isSelfDrag = ([info draggingSource] == tableView); // Are we currently dragging objects from our contents
+	NSArray <QSObject *> *objects = nil;
+
+	if (isSelfDrag)
+		objects = [self.currentArray objectsAtIndexes:_draggedRows];
 	else
-		object = [QSObject objectWithPasteboard:[info draggingPasteboard]];
+		/* FIXME: What actually happens if you multi-drag something else in here ? */
+		objects = @[[QSObject objectWithPasteboard:[info draggingPasteboard]]];
 	switch (mode) {
 		case QSPasteboardHistoryMode:
-			if ([info draggingSource] != tableView)
-				[object putOnPasteboard:[NSPasteboard generalPasteboard]];
+			if ([info draggingSource] != tableView) {
+				for (QSObject *object in objects) {
+					[object putOnPasteboard:[NSPasteboard generalPasteboard]];
+				}
+			}
 			break;
 		case QSPasteboardStoreMode:
-			
-			[pasteboardStoreArray replaceObjectAtIndex:row withObject:object];
-			
-			if ([info draggingSource] == tableView)
-				[pasteboardStoreArray replaceObjectAtIndex:_draggedRow withObject:[QSNullObject nullObject]];
+			[pasteboardStoreArray replaceObjectAtIndex:row withObject:objects[0]];
+
+			if (isSelfDrag)
+				[pasteboardStoreArray replaceObjectAtIndex:[_draggedRows firstIndex] withObject:[QSNullObject nullObject]];
             break;
 		case QSPasteboardQueueMode:
 		case QSPasteboardStackMode:
-			if ([info draggingSource] == tableView)
-				[pasteboardCacheArray moveIndex:_draggedRow toIndex:row];
+			if (isSelfDrag)
+				[pasteboardCacheArray moveIndex:[_draggedRows firstIndex] toIndex:row];
 			else
-				[pasteboardCacheArray insertObject:object atIndex:row];
+				[pasteboardCacheArray insertObjectsFromArray:objects atIndex:row];
 			break;
 		default:
 			break;
 	}
 	[pasteboardHistoryTable reloadData];
     //  NSLog(@"source %@", [info draggingSource]);
-	
+
     return YES;
 }
 
@@ -739,14 +757,14 @@ static NSInteger _draggedRow = -1;
 	height = MAX(height, 10.0);
 	[[NSUserDefaults standardUserDefaults] setDouble:height forKey:@"QSPasteboardRowHeight"];
 	[pasteboardHistoryTable setRowHeight:height];
-    
+
 }
 - (void)windowDidResize:(NSNotification *)aNotification {
 	NSInteger key = [[NSApp currentEvent] modifierFlags] & NSAlternateKeyMask;
-	
+
 	if ((adjustRowsToFit || key) && !(adjustRowsToFit && key) )
 		[self adjustRowHeight];
-	
+
 	//if (!adjustRowsToFit && ") ) {
 	//	}
 }
