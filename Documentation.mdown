@@ -45,7 +45,11 @@ To paste items form the Clipboard Window as plain text, hold the ⌥ (option) ke
 #### Clipboard Contents
 
 The 'Clipboard Contents' proxy object returns whatever you have currently copied to your clipboard. It is useful for setting up with triggers. An example could be:  
-'Clipboard Contents ⇥ Find With... ⇥ Google'
+'Clipboard Contents ⇥ Find With… ⇥ Google'
+
+#### Current Find Clipboard
+
+This returns the text you last searched for in a standard Cocoa application or "copied" with ⌘E. For example, if you just searched for some words in TextEdit, then decide you want to repeat that search on the web, you can run 'Current Find Clipboard ⇥ Find With… ⇥ DuckDuckGo'.
 
 ### Action Objects
 

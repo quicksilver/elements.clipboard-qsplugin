@@ -323,7 +323,13 @@
 
 
 - (id)resolveProxyObject:(id)proxy {
-	QSObject *newObject = [QSObject objectWithPasteboard:[NSPasteboard generalPasteboard]];
+	NSPasteboard *pboard;
+	if ([[proxy identifier] isEqualToString:@"QSGeneralPasteboardProxy"]) {
+		pboard = [NSPasteboard generalPasteboard];
+	} else {
+		pboard = [NSPasteboard pasteboardWithName:NSFindPboard];
+	}
+	QSObject *newObject = [QSObject objectWithPasteboard:pboard];
 	return newObject;
 }
 
