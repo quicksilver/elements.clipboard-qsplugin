@@ -23,7 +23,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField hidden="YES" verticalHuggingPriority="750" id="7">
-                        <rect key="frame" x="183" y="20" width="65" height="22"/>
+                        <rect key="frame" x="183" y="16" width="65" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="45">
                             <font key="font" metaFont="system"/>
@@ -73,8 +73,19 @@
                             <binding destination="17" name="value" keyPath="values.QSPasteboardController HideAfterPasting" id="20"/>
                         </connections>
                     </button>
+                    <button toolTip="Hide clipboard automatically after pasting" id="TyO-k8-hDx" userLabel="Paste on selection">
+                        <rect key="frame" x="17" y="187" width="137" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Paste on selection" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="zvX-Sh-Jno">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="17" name="value" keyPath="values.Paste on Selection" id="vlG-kN-eWb"/>
+                        </connections>
+                    </button>
                     <textField hidden="YES" verticalHuggingPriority="750" id="12">
-                        <rect key="frame" x="17" y="22" width="161" height="17"/>
+                        <rect key="frame" x="17" y="18" width="161" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Ignore items larger than:" id="49">
                             <font key="font" metaFont="system"/>
@@ -92,7 +103,7 @@
                         </textFieldCell>
                     </textField>
                     <button hidden="YES" id="36">
-                        <rect key="frame" x="17" y="45" width="137" height="18"/>
+                        <rect key="frame" x="17" y="36" width="137" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Enable HotKeys" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="51">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -103,7 +114,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" id="54">
-                        <rect key="frame" x="17" y="182" width="135" height="17"/>
+                        <rect key="frame" x="17" y="154" width="135" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Ignore Applications: " id="55">
                             <font key="font" metaFont="cellTitle"/>
@@ -112,7 +123,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="56">
-                        <rect key="frame" x="18" y="90" width="271" height="28"/>
+                        <rect key="frame" x="18" y="62" width="271" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" title="Enter the names of applications that you do not want Quicksilver to store clipboard history for." id="57">
                             <font key="font" metaFont="smallSystem"/>
@@ -121,7 +132,7 @@
                         </textFieldCell>
                     </textField>
                     <tokenField verticalHuggingPriority="750" id="82">
-                        <rect key="frame" x="20" y="125" width="256" height="55"/>
+                        <rect key="frame" x="20" y="97" width="256" height="55"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <tokenFieldCell key="cell" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" drawsBackground="YES" allowsEditingTextAttributes="YES" id="83">
                             <font key="font" metaFont="cellTitle"/>
@@ -151,6 +162,17 @@
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
+                        </connections>
+                    </button>
+                    <button toolTip="Paste directly after selecting an item" id="IbY-tZ-Ao7" userLabel="Beep">
+                        <rect key="frame" x="17" y="169" width="137" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Beep on Paste" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="cN2-ot-hfV">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="17" name="value" keyPath="values.Beep" id="xC4-Rc-pfV"/>
                         </connections>
                     </button>
                 </subviews>

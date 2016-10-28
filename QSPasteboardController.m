@@ -222,23 +222,27 @@
 		case QSPasteboardHistoryMode:
 		case QSPasteboardStoreMode:
 			[self copyToClipboard:[self selectedObject]];
-			QSForcePaste();
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"Paste on Selection"]) {
+				QSForcePaste();
+			}
 			break;
 		case QSPasteboardQueueMode:
 		case QSPasteboardStackMode:
 			if ([pasteboardCacheArray count]) {
-
 				id object = (sender?[pasteboardCacheArray objectAtIndex:0] :[self selectedObject]);
 				supressCapture = YES;
-                [self copyToClipboard:object];
-				QSForcePaste();
+				[self copyToClipboard:object];
+				if([[NSUserDefaults standardUserDefaults] boolForKey:@"Paste on Selection"]) {
+					QSForcePaste();
+				}
 				if (sender) {
 					[pasteboardCacheArray removeObjectAtIndex:0];
 					[pasteboardHistoryTable reloadData];
 				}
 			} else {
-				NSBeep();
-
+                if([[NSUserDefaults standardUserDefaults] boolForKey:@"Beep"]) {
+                    NSBeep();
+                }
 			}
 			break;
 		default:

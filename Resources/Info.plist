@@ -19,19 +19,23 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.5.0</string>
 	<key>CFBundleVersion</key>
-	<string>144</string>
+	<string>14F</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2014, QSApp</string>
 	<key>NSPrincipalClass</key>
 	<string>QSPasteboardController</string>
 	<key>QSDefaults</key>
 	<dict>
+		<key>Beep</key>
+		<false/>
 		<key>Capture Pasteboard History</key>
 		<false/>
 		<key>Capture Pasteboard History Count</key>
 		<integer>10</integer>
 		<key>Discard Pasteboard History</key>
 		<true/>
+		<key>Paste on Selection</key>
+		<false/>
 		<key>QSPasteboardController HideAfterPasting</key>
 		<false/>
 	</dict>
