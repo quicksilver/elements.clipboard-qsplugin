@@ -240,9 +240,9 @@
 					[pasteboardHistoryTable reloadData];
 				}
 			} else {
-                if([[NSUserDefaults standardUserDefaults] boolForKey:@"Beep"]) {
-                    NSBeep();
-                }
+				if([[NSUserDefaults standardUserDefaults] boolForKey:@"Beep"]) {
+					NSBeep();
+				}
 			}
 			break;
 		default:
