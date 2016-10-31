@@ -74,7 +74,7 @@
                             <binding destination="17" name="value" keyPath="values.QSPasteboardController HideAfterPasting" id="20"/>
                         </connections>
                     </button>
-                    <button toolTip="Hide clipboard automatically after pasting" id="TyO-k8-hDx" userLabel="Paste on selection">
+                    <button toolTip="Paste directly after Selection" id="TyO-k8-hDx" userLabel="Paste on selection">
                         <rect key="frame" x="17" y="196" width="137" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Paste on selection" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="zvX-Sh-Jno">
@@ -82,7 +82,7 @@
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
-                            <binding destination="17" name="value" keyPath="values.Paste on Selection" id="vlG-kN-eWb"/>
+                            <binding destination="17" name="value" keyPath="values.QSPasteboard Paste on Selection" id="vlG-kN-eWb"/>
                         </connections>
                     </button>
                     <textField hidden="YES" verticalHuggingPriority="750" id="12">
@@ -163,17 +163,6 @@
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                        </connections>
-                    </button>
-                    <button toolTip="Paste directly after selecting an item" id="IbY-tZ-Ao7" userLabel="Beep">
-                        <rect key="frame" x="17" y="178" width="137" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Beep on Paste" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="cN2-ot-hfV">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                        </buttonCell>
-                        <connections>
-                            <binding destination="17" name="value" keyPath="values.Beep" id="xC4-Rc-pfV"/>
                         </connections>
                     </button>
                 </subviews>

@@ -26,7 +26,7 @@
 	<string>QSPasteboardController</string>
 	<key>QSDefaults</key>
 	<dict>
-		<key>Beep</key>
+		<key>QSPasteboard Paste on Selection</key>
 		<false/>
 		<key>Capture Pasteboard History</key>
 		<false/>
@@ -34,8 +34,6 @@
 		<integer>10</integer>
 		<key>Discard Pasteboard History</key>
 		<true/>
-		<key>Paste on Selection</key>
-		<false/>
 		<key>QSPasteboardController HideAfterPasting</key>
 		<false/>
 	</dict>
