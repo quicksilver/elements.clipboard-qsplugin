@@ -372,7 +372,7 @@
     // check the string value of the objects to compare (the object's aren't necessarily the same if one has more pasteboard types
     // (e.g. RTF data) than the other)
     // receiving selection decides whether an existing object on the clipboard should be 'moved up' to the 0th position
-    BOOL recievingSelection = [[[self selectedObject] stringValue] isEqualToString:[newObject stringValue]];
+
     NSIndexSet *objectsToRemove = [pasteboardHistoryArray indexesOfObjectsPassingTest:^BOOL(QSObject *pasteboardObject, NSUInteger idx, BOOL *stop) {
         // if the object (string) is already on the pasteboard
         if([[pasteboardObject stringValue] isEqualToString:[newObject stringValue]]) {
@@ -428,6 +428,8 @@
 
     [pasteboardHistoryTable reloadData];
 
+
+    BOOL recievingSelection = [[[self selectedObject] stringValue] isEqualToString:[newObject stringValue]];
     if (recievingSelection) {
         [pasteboardHistoryTable selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
         [pasteboardHistoryTable scrollRowToVisible:0];
