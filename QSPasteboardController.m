@@ -511,8 +511,8 @@
 - (id)selectedObject {
     @synchronized(self.currentArray) {
         NSInteger index = [pasteboardHistoryTable selectedRow];
-        if (index<0) return nil;
-        if (![self.currentArray count]) return nil;
+        if (index < 0 || index >= (NSInteger)self.currentArray.count) return nil;
+
         return [self.currentArray objectAtIndex:index];
     }
 }
@@ -636,13 +636,14 @@
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
     //  rowIndex++;
     @synchronized(self.currentArray) {
-        if (rowIndex>((NSInteger)[self.currentArray count] -1) ) {
+        if (rowIndex < 0 || rowIndex >= (NSInteger)self.currentArray.count) {
             return nil;
         }
-        if ([[aTableColumn identifier] isEqualToString:@"object"] && (NSInteger)[self.currentArray count] >rowIndex)
+        if ([[aTableColumn identifier] isEqualToString:@"object"])
             return [self.currentArray objectAtIndex:rowIndex];
+
         if ([[aTableColumn identifier] isEqualToString:@"sequence"]) {
-            if (rowIndex<9) return [NSNumber numberWithInteger:rowIndex+1];
+            if (rowIndex < 9) return [NSNumber numberWithInteger:rowIndex+1];
         }
     }
 
@@ -660,7 +661,7 @@
 }
 - (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
     //NSLog(@"setCell %d", rowIndex);
-    if (rowIndex >= (NSInteger)([self.currentArray count] -1) ) return;
+    if (rowIndex < 0 || rowIndex >= (NSInteger)self.currentArray.count) return;
     if ([[aTableColumn identifier] isEqualToString:@"object"]) {
         [aCell setRepresentedObject:[self.currentArray objectAtIndex:rowIndex]];
 		[aCell setState:NSOffState];
