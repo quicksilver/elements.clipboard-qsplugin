@@ -428,8 +428,12 @@
 
     [pasteboardHistoryTable reloadData];
 
+    /* Safeguard against weird objects getting in here, like QSNullObject */
+    id obj = self.selectedObject;
+    if (![obj respondsToSelector:@selector(stringValue)])
+        obj = nil;
 
-    BOOL recievingSelection = [[[self selectedObject] stringValue] isEqualToString:[newObject stringValue]];
+    BOOL recievingSelection = [[obj stringValue] isEqualToString:[newObject stringValue]];
     if (recievingSelection) {
         [pasteboardHistoryTable selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
         [pasteboardHistoryTable scrollRowToVisible:0];
