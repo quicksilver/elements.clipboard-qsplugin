@@ -372,7 +372,7 @@
     // check the string value of the objects to compare (the object's aren't necessarily the same if one has more pasteboard types
     // (e.g. RTF data) than the other)
     // receiving selection decides whether an existing object on the clipboard should be 'moved up' to the 0th position
-    BOOL recievingSelection = [[[self selectedObject] stringValue] isEqualToString:[newObject stringValue]];
+
     NSIndexSet *objectsToRemove = [pasteboardHistoryArray indexesOfObjectsPassingTest:^BOOL(QSObject *pasteboardObject, NSUInteger idx, BOOL *stop) {
         // if the object (string) is already on the pasteboard
         if([[pasteboardObject stringValue] isEqualToString:[newObject stringValue]]) {
@@ -428,6 +428,12 @@
 
     [pasteboardHistoryTable reloadData];
 
+    /* Safeguard against weird objects getting in here, like QSNullObject */
+    id obj = self.selectedObject;
+    if (![obj respondsToSelector:@selector(stringValue)])
+        obj = nil;
+
+    BOOL recievingSelection = [[obj stringValue] isEqualToString:[newObject stringValue]];
     if (recievingSelection) {
         [pasteboardHistoryTable selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
         [pasteboardHistoryTable scrollRowToVisible:0];
@@ -511,8 +517,8 @@
 - (id)selectedObject {
     @synchronized(self.currentArray) {
         NSInteger index = [pasteboardHistoryTable selectedRow];
-        if (index<0) return nil;
-        if (![self.currentArray count]) return nil;
+        if (index < 0 || index >= (NSInteger)self.currentArray.count) return nil;
+
         return [self.currentArray objectAtIndex:index];
     }
 }
@@ -636,13 +642,14 @@
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
     //  rowIndex++;
     @synchronized(self.currentArray) {
-        if (rowIndex>((NSInteger)[self.currentArray count] -1) ) {
+        if (rowIndex < 0 || rowIndex >= (NSInteger)self.currentArray.count) {
             return nil;
         }
-        if ([[aTableColumn identifier] isEqualToString:@"object"] && (NSInteger)[self.currentArray count] >rowIndex)
+        if ([[aTableColumn identifier] isEqualToString:@"object"])
             return [self.currentArray objectAtIndex:rowIndex];
+
         if ([[aTableColumn identifier] isEqualToString:@"sequence"]) {
-            if (rowIndex<9) return [NSNumber numberWithInteger:rowIndex+1];
+            if (rowIndex < 9) return [NSNumber numberWithInteger:rowIndex+1];
         }
     }
 
@@ -660,7 +667,7 @@
 }
 - (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
     //NSLog(@"setCell %d", rowIndex);
-    if (rowIndex >= (NSInteger)([self.currentArray count] -1) ) return;
+    if (rowIndex < 0 || rowIndex >= (NSInteger)self.currentArray.count) return;
     if ([[aTableColumn identifier] isEqualToString:@"object"]) {
         [aCell setRepresentedObject:[self.currentArray objectAtIndex:rowIndex]];
 		[aCell setState:NSOffState];
