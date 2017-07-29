@@ -26,13 +26,13 @@
 	<string>QSPasteboardController</string>
 	<key>QSDefaults</key>
 	<dict>
-		<key>QSPasteboard Paste on Selection</key>
-		<false/>
 		<key>Capture Pasteboard History</key>
 		<false/>
 		<key>Capture Pasteboard History Count</key>
 		<integer>10</integer>
 		<key>Discard Pasteboard History</key>
+		<true/>
+		<key>QSPasteboard Paste on Selection</key>
 		<true/>
 		<key>QSPasteboardController HideAfterPasting</key>
 		<false/>
