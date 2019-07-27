@@ -148,7 +148,6 @@
 			[hotKey setTarget:self selector:@selector(qsPaste:)];
 			[hotKey setEnabled:YES];
 		}
-        pasteboardQueue = dispatch_queue_create("Clipboard Plugin Pasteboard Queue", DISPATCH_QUEUE_SERIAL);
 
 	}
 	return self;
@@ -341,12 +340,13 @@
 
 // Called when an item should be added to the clipboard history
 - (void)pasteboardChanged:(NSNotification*)notif {
-    dispatch_async(pasteboardQueue, ^{
+    QSGCDMainAsync(^{
         [self handlePasteboardChanged:notif];
     });
 }
 
 - (void)handlePasteboardChanged:(NSNotification *)notif {
+	
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	if (! [defaults boolForKey:kCapturePasteboardHistory]) return;
 
