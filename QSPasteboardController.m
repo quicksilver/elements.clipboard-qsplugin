@@ -148,7 +148,6 @@
 			[hotKey setTarget:self selector:@selector(qsPaste:)];
 			[hotKey setEnabled:YES];
 		}
-        pasteboardQueue = dispatch_queue_create("Clipboard Plugin Pasteboard Queue", DISPATCH_QUEUE_SERIAL);
 
 	}
 	return self;
@@ -218,10 +217,11 @@
 
 
 - (IBAction)qsPaste:(id)sender {
+	QSObject *selectedObject = [self selectedObject];
 	switch (mode) {
 		case QSPasteboardHistoryMode:
 		case QSPasteboardStoreMode:
-			[self copyToClipboard:[self selectedObject]];
+			[self copyToClipboard:selectedObject];
 			if([[NSUserDefaults standardUserDefaults] boolForKey:@"QSPasteboard Paste on Selection"]) {
 				QSForcePaste();
 			}
@@ -229,7 +229,7 @@
 		case QSPasteboardQueueMode:
 		case QSPasteboardStackMode:
 			if ([pasteboardCacheArray count]) {
-				id object = (sender?[pasteboardCacheArray objectAtIndex:0] :[self selectedObject]);
+				id object = (sender?[pasteboardCacheArray objectAtIndex:0] : selectedObject);
 				supressCapture = YES;
 				[self copyToClipboard:object];
 				if([[NSUserDefaults standardUserDefaults] boolForKey:@"QSPasteboard Paste on Selection"]) {
@@ -341,12 +341,13 @@
 
 // Called when an item should be added to the clipboard history
 - (void)pasteboardChanged:(NSNotification*)notif {
-    dispatch_async(pasteboardQueue, ^{
+    QSGCDMainAsync(^{
         [self handlePasteboardChanged:notif];
     });
 }
 
 - (void)handlePasteboardChanged:(NSNotification *)notif {
+	
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	if (! [defaults boolForKey:kCapturePasteboardHistory]) return;
 
@@ -356,39 +357,44 @@
     }
 
     NSInteger maxCount = [[NSUserDefaults standardUserDefaults] integerForKey:kCapturePasteboardHistoryCount];
-	// run through the pasteboard history, removing unused (over the max count) objects
-	while ((NSInteger)[pasteboardHistoryArray count] >maxCount) [pasteboardHistoryArray removeLastObject];
+	NSPasteboard *pboard = [[notif object] objectForKey:@"Pasteboard"];
+	
+	if (![pboard pasteboardItems].count) {
+		// Pasteboard is empty. Password apps (e.g. 1Password) push an empty item item to the pasteboard
+		return;
+	}
 	// get a new object from the general (system-wide) pasteboard
-    QSObject *newObject = [QSObject objectWithPasteboard:[[notif object] objectForKey:@"Pasteboard"]];
+    __block QSObject *newObject = [QSObject objectWithPasteboard:pboard];
 
 	if (!newObject) {
         return;
     }
-    // some apps (e.g. 1Password and its browser extensions) copy a blank string to the clipboard to clear it.
-    // Quicksilver should take this into consideration and remove the empty value from history
-    if ([pasteboardHistoryArray count] && [newObject objectForType:QSTextType] && ![[newObject objectForType:QSTextType] length]) {
-        [pasteboardHistoryArray removeObjectAtIndex:0];
-        return;
-    }
 
-    // check the string value of the objects to compare (the object's aren't necessarily the same if one has more pasteboard types
-    // (e.g. RTF data) than the other)
-    // receiving selection decides whether an existing object on the clipboard should be 'moved up' to the 0th position
-
-    NSIndexSet *objectsToRemove = [pasteboardHistoryArray indexesOfObjectsPassingTest:^BOOL(QSObject *pasteboardObject, NSUInteger idx, BOOL *stop) {
-        // if the object (string) is already on the pasteboard
+	// run through the pasteboard history, removing unused (over the max count) objects
+	while ((NSInteger)[pasteboardHistoryArray count] > maxCount) [pasteboardHistoryArray removeLastObject];
+	
+	// Store the most 'rich' (has more data types) version of an object on the pasteboard (e.g. a QSObject with RTF data over just plaintext data)
+	__block BOOL updatePasteboard = NO;
+    NSIndexSet *existingObjectIndex = [pasteboardHistoryArray indexesOfObjectsPassingTest:^BOOL(QSObject *pasteboardObject, NSUInteger idx, BOOL *stop) {
         if([[pasteboardObject stringValue] isEqualToString:[newObject stringValue]]) {
-            // Fix the object with the most types (each type is stored in the dataDictionary)
-            if([[pasteboardObject dataDictionary] count] > [[newObject dataDictionary] count]) {
-                //Keep the old object, it's better
-                [[newObject dataDictionary] addEntriesFromDictionary:[pasteboardObject dataDictionary]];
-            }
-            *stop = YES;
-            return YES;
+			if ([pasteboardObject dataDictionary].count > [newObject dataDictionary].count) {
+				newObject = pasteboardObject;
+				updatePasteboard = YES;
+			}
+			*stop = YES;
+			return YES;
         }
         return NO;
     }];
-    [pasteboardHistoryArray removeObjectsAtIndexes:objectsToRemove];
+	if (updatePasteboard) {
+		// also put this item *back* on the pasteboard
+		supressCapture = YES;
+		[newObject putOnPasteboard:[NSPasteboard generalPasteboard]];
+		return;
+	}
+	id selectedObject = [self selectedObject];
+	[pasteboardHistoryArray removeObjectsAtIndexes:existingObjectIndex];
+
 
 #warning Fixme: writing pasteboard files to disk
     // ******* Commented out code for writing clipboard data to file. Needs to be implemented properly at some point
@@ -431,11 +437,10 @@
     [pasteboardHistoryTable reloadData];
 
     /* Safeguard against weird objects getting in here, like QSNullObject */
-    id obj = self.selectedObject;
-    if (![obj respondsToSelector:@selector(stringValue)])
-        obj = nil;
+    if (![selectedObject respondsToSelector:@selector(stringValue)])
+        selectedObject = nil;
 
-    BOOL recievingSelection = [[obj stringValue] isEqualToString:[newObject stringValue]];
+    BOOL recievingSelection = [[selectedObject stringValue] isEqualToString:[newObject stringValue]];
     if (recievingSelection) {
         [pasteboardHistoryTable selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
         [pasteboardHistoryTable scrollRowToVisible:0];

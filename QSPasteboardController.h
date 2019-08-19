@@ -39,7 +39,6 @@ typedef NS_ENUM(NSUInteger, QSPasteboardMode) {
     BOOL captureHistory;
     NSArray *ignoredApps;
 	QSPasteboardMode mode;
-    dispatch_queue_t pasteboardQueue;
 }
 
 @property NSMutableArray *currentArray;

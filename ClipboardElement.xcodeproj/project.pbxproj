@@ -42,7 +42,7 @@
 		CDA81DA6157D0B6000951D71 /* QSPasteboardPrefPane.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QSPasteboardPrefPane.xib; sourceTree = "<group>"; };
 		CDA81DA8157D0CC800951D71 /* Pasteboard.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Pasteboard.xib; sourceTree = "<group>"; };
 		DD92D38A0106425D02CA0E72 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		E1472168072C81A20088105C /* en */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E1472168072C81A20088105C /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E1472172072C81DE0088105C /* Clipboard.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Clipboard.icns; sourceTree = "<group>"; };
 		E1472173072C81DE0088105C /* CopyBottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CopyBottom.png; sourceTree = "<group>"; };
 		E1472174072C81DE0088105C /* CopyTop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CopyTop.png; sourceTree = "<group>"; };
