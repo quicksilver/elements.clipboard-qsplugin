@@ -364,7 +364,7 @@
 		return;
 	}
 	// get a new object from the general (system-wide) pasteboard
-    __block QSObject *newObject = [QSObject objectWithPasteboard:pboard];
+	QSObject *newObject = [QSObject objectWithPasteboard:pboard];
 
 	if (!newObject) {
         return;
@@ -374,25 +374,16 @@
 	while ((NSInteger)[pasteboardHistoryArray count] > maxCount) [pasteboardHistoryArray removeLastObject];
 	
 	// Store the most 'rich' (has more data types) version of an object on the pasteboard (e.g. a QSObject with RTF data over just plaintext data)
-	__block BOOL updatePasteboard = NO;
     NSIndexSet *existingObjectIndex = [pasteboardHistoryArray indexesOfObjectsPassingTest:^BOOL(QSObject *pasteboardObject, NSUInteger idx, BOOL *stop) {
         if([[pasteboardObject stringValue] isEqualToString:[newObject stringValue]]) {
 			if ([pasteboardObject dataDictionary].count > [newObject dataDictionary].count) {
-				newObject = pasteboardObject;
-				updatePasteboard = YES;
+					[[newObject dataDictionary] addEntriesFromDictionary:[pasteboardObject dataDictionary]];
 			}
 			*stop = YES;
 			return YES;
         }
         return NO;
     }];
-	if (updatePasteboard) {
-		// also put this item *back* on the pasteboard
-		supressCapture = YES;
-		[newObject putOnPasteboard:[NSPasteboard generalPasteboard]];
-		return;
-	}
-	id selectedObject = [self selectedObject];
 	[pasteboardHistoryArray removeObjectsAtIndexes:existingObjectIndex];
 
 
@@ -433,7 +424,7 @@
 
     supressCapture = NO;
 
-
+	id selectedObject = [self selectedObject];
     [pasteboardHistoryTable reloadData];
 
     /* Safeguard against weird objects getting in here, like QSNullObject */
