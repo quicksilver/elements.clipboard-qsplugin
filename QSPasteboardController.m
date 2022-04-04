@@ -203,14 +203,15 @@
 
 - (void)pasteItem:(id)sender {
     [[self window] resignKeyWindowNow];
-    asPlainText = (([[NSApp currentEvent] modifierFlags] & NSDeviceIndependentModifierFlagsMask) == NSAlternateKeyMask);
+    asPlainText = (([[NSApp currentEvent] modifierFlags] & NSEventModifierFlagDeviceIndependentFlagsMask) == NSEventModifierFlagOption);
 
 	[self qsPaste:nil];
-
+	
 	[self hideWindow:sender];
-
     [[(QSController *)[NSApp delegate] interfaceController] hideWindows:self];
-
+	
+	// scroll to first item
+	[pasteboardHistoryTable selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
 
 	// ***warning   * the clipboard should be restored
 }
