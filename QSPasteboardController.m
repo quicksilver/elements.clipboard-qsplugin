@@ -80,7 +80,9 @@
 }
 
 + (void)showClipboard:(id)sender {
-	[[[self sharedInstance] window] toggle:sender];
+	QSGCDMainAsync(^{
+		[[[self sharedInstance] window] toggle:sender];
+	});
 
 }
 
