@@ -34,12 +34,10 @@
 
 - (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView{
     
-    if (![self isHighlighted]){
     NSBezierPath *roundRect=[NSBezierPath bezierPath];
     [roundRect appendBezierPathWithRoundedRectangle:NSInsetRect(cellFrame,1,1) withRadius:NSWidth(cellFrame)/4];
-    [[[self textColor] colorWithAlphaComponent:0.1]set];
+    [[[self textColor] colorWithAlphaComponent:0.1] set];
     [roundRect fill];
-    }
     
     if ([self objectValue]){
         NSUInteger rank=[[self objectValue] unsignedIntegerValue];

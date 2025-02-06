@@ -276,7 +276,7 @@
     [pasteboardHistoryTable setDoubleAction:@selector(pasteItem:)];
 
     [pasteboardHistoryTable setTarget:self];
-
+    [pasteboardHistoryTable setOpaque:YES];
     newCell = [[QSObjectCell alloc] init];
     [[pasteboardHistoryTable tableColumnWithIdentifier: @"object"] setDataCell:newCell];
 
@@ -387,29 +387,8 @@
         }
         return NO;
     }];
+    
 	[pasteboardHistoryArray removeObjectsAtIndexes:existingObjectIndex];
-
-
-#warning Fixme: writing pasteboard files to disk
-    // ******* Commented out code for writing clipboard data to file. Needs to be implemented properly at some point
-    // If the object's entirely new to the clipboard, we need to add some info to it
-    //		if(!keepOldObject) {
-    //
-    //#define MAX_NAME_LENGTH 100
-    //			NSString *name = [newObject name];
-    //			if ([name length] > MAX_NAME_LENGTH)
-    //				name = [name substringToIndex:MAX_NAME_LENGTH];
-    //			//name = [NSString stringWithFormat:@"%@.%@", name,dateString];
-    //
-    //			// A string to the app support folder containing the clipboard data
-    //			NSString *path = QSApplicationSupportSubPath(@"Data/Clipboard/", YES);
-    //			path = [path stringByAppendingPathComponent:name];
-    //			path = [path stringByAppendingPathExtension:@"qs"];
-    //			// find a unique name (append 1, 2, 3 etc. to end of file name until unique name found)
-    //			path = [path firstUnusedFilePath];
-    //
-    //			[newObject writeToFile:path];
-    //		}
     [pasteboardHistoryArray insertObject:newObject atIndex:0];
 
     if (!supressCapture) {
@@ -428,7 +407,7 @@
     supressCapture = NO;
 
 	id selectedObject = [self selectedObject];
-    [pasteboardHistoryTable reloadData];
+    [pasteboardHistoryTable noteNumberOfRowsChanged];
 
     /* Safeguard against weird objects getting in here, like QSNullObject */
     if (![selectedObject respondsToSelector:@selector(stringValue)])
@@ -450,6 +429,7 @@
         }
     }
     if (![[NSUserDefaults standardUserDefaults] boolForKey:kDiscardPasteboardHistoryOnQuit]) {
+        
         [QSLib savePasteboardHistory];
     }
 }
@@ -516,17 +496,15 @@
     }
 }
 - (id)selectedObject {
-    @synchronized(self.currentArray) {
-        NSInteger index = [pasteboardHistoryTable selectedRow];
-        if (index < 0 || index >= (NSInteger)self.currentArray.count) return nil;
+    NSInteger index = [pasteboardHistoryTable selectedRow];
+    if (index < 0 || index >= (NSInteger)self.currentArray.count) return nil;
 
-        return [self.currentArray objectAtIndex:index];
-    }
+    return [self.currentArray objectAtIndex:index];
 }
 
 - (void)copyToClipboard:(QSObject *)obj {
     if (!asPlainText) {
-        [obj putOnPasteboard:[NSPasteboard generalPasteboard] includeDataForTypes:nil];
+        [obj putOnPasteboard:[NSPasteboard generalPasteboard]];
     } else {
         [obj putOnPasteboardAsPlainTextOnly:[NSPasteboard generalPasteboard]];
     }
@@ -641,29 +619,16 @@
 }
 
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
-    //  rowIndex++;
-    @synchronized(self.currentArray) {
-        if (rowIndex < 0 || rowIndex >= (NSInteger)self.currentArray.count) {
-            return nil;
-        }
-        if ([[aTableColumn identifier] isEqualToString:@"object"])
-            return [self.currentArray objectAtIndex:rowIndex];
 
-        if ([[aTableColumn identifier] isEqualToString:@"sequence"]) {
-            if (rowIndex < 9) return [NSNumber numberWithInteger:rowIndex+1];
-        }
+    if (rowIndex < 0 || rowIndex >= (NSInteger)self.currentArray.count) {
+        return nil;
     }
+    if ([[aTableColumn identifier] isEqualToString:@"object"])
+        return [self.currentArray objectAtIndex:rowIndex];
 
-	//	if ([[aTableColumn identifier] isEqualToString:@"source"]) {
-	//        NSString *source = [[pasteboardHistoryArray objectAtIndex:rowIndex] objectForKey:kQSObjectSource];
-	//        if (!source) source = @"Unknown";
-	//        return source;
-	//    }
-	//    if ([[aTableColumn identifier] isEqualToString:@"name"])
-	//        return [[pasteboardHistoryArray objectAtIndex:rowIndex] name];
-	//    if ([[aTableColumn identifier] isEqualToString:@"date"])
-	//        return [NSDate dateWithTimeIntervalSinceReferenceDate:[[[pasteboardHistoryArray objectAtIndex:rowIndex] objectForKey:kQSObjectSource] floatValue]];
-
+    if ([[aTableColumn identifier] isEqualToString:@"sequence"]) {
+        if (rowIndex < 9) return [NSNumber numberWithInteger:rowIndex+1];
+    }
     return nil;
 }
 - (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex {
@@ -691,7 +656,7 @@
 
 	_draggedRows = rowIndexes;
 
-	[draggedObjects[0] putOnPasteboard:pboard includeDataForTypes:nil];
+	[draggedObjects[0] putOnPasteboard:pboard];
 	return YES;
 }
 

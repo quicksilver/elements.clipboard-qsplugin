@@ -64,7 +64,7 @@
         case NSLeftMouseDragged:
            // [super mouseDragged:theEvent];
             if (objectValue){
-                NSImage *dragImage=[[self objectValue]image];
+                NSImage *dragImage=[[self objectValue] image];
                 NSSize dragOffset = NSMakeSize(0.0, 0.0);
                 NSPasteboard *pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
                 [[self objectValue] putOnPasteboard:pboard includeDataForTypes:nil];

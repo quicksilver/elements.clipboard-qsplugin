@@ -9,7 +9,7 @@
 }
 
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender {    
-    [[QSObject objectWithPasteboard:[sender draggingPasteboard]] putOnPasteboard:[NSPasteboard generalPasteboard] includeDataForTypes:nil];
+    [[QSObject objectWithPasteboard:[sender draggingPasteboard]] putOnPasteboard:[NSPasteboard generalPasteboard]];
     return YES;
 }
 
