@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-11
+    runs-on: macos-13
     env:
       QS_BUILD_ONLY: 1
       QS_SOURCE_ROOT: "/tmp/git/quicksilver"
@@ -109,7 +109,7 @@ jobs:
 
   sign:
     needs: build
-    runs-on: macos-11
+    runs-on: macos-13
     env:
       MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
       MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
