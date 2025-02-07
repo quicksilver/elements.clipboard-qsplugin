@@ -19,6 +19,8 @@
 @dynamic window;
 
 + (void)initialize {
+    
+    // add clipboard option to the Quicksilver menu
 	NSMenu *modulesMenu = [[[NSApp mainMenu] itemWithTag:128] submenu];
 	NSMenuItem *modMenuItem = [modulesMenu addItemWithTitle:@"Clipboard History" action:@selector(showClipboard:) keyEquivalent:@"l"];
 	[modMenuItem setTarget:self];
@@ -257,6 +259,7 @@
     [pasteboardHistoryTable registerForDraggedTypes:standardPasteboardTypes];
     [[self window] setLevel:27];
     [[self window] setHidesOnDeactivate:NO];
+//    [self window].styleMask |= NSWindowStyleMaskResizable;
     [pasteboardHistoryArray makeObjectsPerformSelector:@selector(loadIcon)];
 
     [[self window] setAutosaveName:@"QSPasteboardHistoryWindow"]; // should use the real methods to do this
@@ -353,7 +356,7 @@
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	if (! [defaults boolForKey:kCapturePasteboardHistory]) return;
-
+    
     // don't add the object to the clipboard if the user's whitelisted the app
     if ([[defaults arrayForKey:@"clipboardIgnoreApps"] containsObject:[[notif object] objectForKey:@"ActiveApp"]]) {
         return;

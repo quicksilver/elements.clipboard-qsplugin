@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11542"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,22 +17,22 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="157" y="621" width="365" height="320"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1028"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="365" height="320"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField hidden="YES" verticalHuggingPriority="750" id="7">
+                    <textField hidden="YES" focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7">
                         <rect key="frame" x="183" y="21" width="65" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="45">
                             <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField toolTip="Number of items to save" verticalHuggingPriority="750" id="8">
+                    <textField toolTip="Number of items to save" focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8">
                         <rect key="frame" x="41" y="259" width="30" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="10" drawsBackground="YES" id="46">
@@ -44,7 +44,7 @@
                                 <decimal key="maximum" value="NaN"/>
                             </numberFormatter>
                             <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
@@ -52,7 +52,7 @@
                             <binding destination="17" name="value" keyPath="values.Capture Pasteboard History Count" id="19"/>
                         </connections>
                     </textField>
-                    <button toolTip="Save items copied to the clipboard" id="9">
+                    <button toolTip="Save items copied to the clipboard" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9">
                         <rect key="frame" x="17" y="284" width="127" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Capture History:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="47">
@@ -63,7 +63,7 @@
                             <binding destination="17" name="value" keyPath="values.Capture Pasteboard History" id="18"/>
                         </connections>
                     </button>
-                    <button toolTip="Hide clipboard automatically after pasting" id="11">
+                    <button toolTip="Hide clipboard automatically after pasting" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="11">
                         <rect key="frame" x="17" y="214" width="137" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Hide after pasting" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="48">
@@ -74,7 +74,7 @@
                             <binding destination="17" name="value" keyPath="values.QSPasteboardController HideAfterPasting" id="20"/>
                         </connections>
                     </button>
-                    <button toolTip="Paste directly after Selection" id="TyO-k8-hDx" userLabel="Paste on selection">
+                    <button toolTip="Paste directly after Selection" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TyO-k8-hDx" userLabel="Paste on selection">
                         <rect key="frame" x="17" y="196" width="137" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Paste on selection" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="zvX-Sh-Jno">
@@ -85,7 +85,7 @@
                             <binding destination="17" name="value" keyPath="values.QSPasteboard Paste on Selection" id="vlG-kN-eWb"/>
                         </connections>
                     </button>
-                    <textField hidden="YES" verticalHuggingPriority="750" id="12">
+                    <textField hidden="YES" focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="12">
                         <rect key="frame" x="17" y="25" width="161" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Ignore items larger than:" id="49">
@@ -94,7 +94,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="13">
+                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="13">
                         <rect key="frame" x="74" y="262" width="129" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="items" id="50">
@@ -103,7 +103,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button hidden="YES" id="36">
+                    <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="36">
                         <rect key="frame" x="17" y="41" width="137" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Enable HotKeys" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="51">
@@ -114,7 +114,7 @@
                             <binding destination="17" name="value" keyPath="values.QSClipboardModule/EnableHotKeys" id="39"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" id="54">
+                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="54">
                         <rect key="frame" x="17" y="157" width="135" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Ignore Applications: " id="55">
@@ -123,7 +123,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="56">
+                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="56">
                         <rect key="frame" x="18" y="65" width="271" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" title="Enter the names of applications that you do not want Quicksilver to store clipboard history for." id="57">
@@ -132,7 +132,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <tokenField verticalHuggingPriority="750" id="82">
+                    <tokenField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="82">
                         <rect key="frame" x="20" y="100" width="256" height="55"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <tokenFieldCell key="cell" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" drawsBackground="YES" allowsEditingTextAttributes="YES" id="83">
@@ -149,7 +149,7 @@
                             <outlet property="delegate" destination="-2" id="89"/>
                         </connections>
                     </tokenField>
-                    <button toolTip="Clipboard history will be stored unencrypted on disk. Not recommended if you will ever copy sensitive data." id="SAG-k3-XDG">
+                    <button toolTip="Clipboard history will be stored unencrypted on disk. Not recommended if you will ever copy sensitive data." fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SAG-k3-XDG">
                         <rect key="frame" x="38" y="234" width="309" height="20"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Keep history when restarting (insecure)" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="ST0-2s-72e">
@@ -167,6 +167,7 @@
                     </button>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="124" y="-102"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="17" userLabel="Shared Defaults"/>
     </objects>
