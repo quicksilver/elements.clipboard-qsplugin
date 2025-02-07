@@ -102,7 +102,7 @@ jobs:
       run: |
         tar -czvf "${{ env.PLUGIN_NAME }}.tar.gz" "${{ env.PLUGIN_NAME }}"
     - name: Upload components for sign action
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: UNSIGNED_PLUGIN
         path: /tmp/QS/build/Release/Quicksilver.app/Contents/PlugIns/${{ env.PLUGIN_NAME }}.tar.gz
@@ -118,7 +118,7 @@ jobs:
       SIGNING_IDENTITY: ${{ secrets.SIGNING_IDENTITY }}
     steps:
     - name: Download targz artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: UNSIGNED_PLUGIN
         path: /tmp/QS/build/Release/
@@ -152,7 +152,7 @@ jobs:
       run: |
         tar -czvf "${{ env.PLUGIN_NAME }}.tar.gz" "${{ env.PLUGIN_NAME }}"
     - name: Upload document
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ env.PLUGIN_NAME }}
         path: /tmp/QS/build/Release/${{ env.PLUGIN_NAME }}.tar.gz
