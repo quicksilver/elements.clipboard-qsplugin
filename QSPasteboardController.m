@@ -225,14 +225,14 @@
 		case QSPasteboardHistoryMode:
 		case QSPasteboardStoreMode:
 			[self copyToClipboard:selectedObject];
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"QSPasteboard Paste on Selection"]) {
+                if([[NSUserDefaults standardUserDefaults] boolForKey:@"QSPasteboard Paste on Selection"]) {
 				QSForcePaste();
 			}
 			break;
 		case QSPasteboardQueueMode:
 		case QSPasteboardStackMode:
 			if ([pasteboardCacheArray count]) {
-				id object = (sender?[pasteboardCacheArray objectAtIndex:0] : selectedObject);
+				id object = (sender ? [pasteboardCacheArray objectAtIndex:0] : selectedObject);
 				supressCapture = YES;
 				[self copyToClipboard:object];
 				if([[NSUserDefaults standardUserDefaults] boolForKey:@"QSPasteboard Paste on Selection"]) {
@@ -350,7 +350,7 @@
 }
 
 - (void)handlePasteboardChanged:(NSNotification *)notif {
-	
+
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	if (! [defaults boolForKey:kCapturePasteboardHistory]) return;
 
@@ -407,7 +407,6 @@
     supressCapture = NO;
 
 	id selectedObject = [self selectedObject];
-    [pasteboardHistoryTable noteNumberOfRowsChanged];
 
     /* Safeguard against weird objects getting in here, like QSNullObject */
     if (![selectedObject respondsToSelector:@selector(stringValue)])
@@ -428,6 +427,7 @@
                 [pasteboardHistoryTable deselectRow:row];
         }
     }
+    [pasteboardHistoryTable reloadData];
     if (![[NSUserDefaults standardUserDefaults] boolForKey:kDiscardPasteboardHistoryOnQuit]) {
         
         [QSLib savePasteboardHistory];
