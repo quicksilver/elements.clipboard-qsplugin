@@ -263,7 +263,6 @@
     [pasteboardHistoryArray makeObjectsPerformSelector:@selector(loadIcon)];
 
     [[self window] setAutosaveName:@"QSPasteboardHistoryWindow"]; // should use the real methods to do this
-    NSCell *newCell = nil;
 
     //NSImageCell *imageCell = nil;
     [pasteboardHistoryTable setVerticalMotionCanBeginDrag: TRUE];
@@ -280,12 +279,15 @@
 
     [pasteboardHistoryTable setTarget:self];
     [pasteboardHistoryTable setOpaque:YES];
-    newCell = [[QSObjectCell alloc] init];
-    [[pasteboardHistoryTable tableColumnWithIdentifier: @"object"] setDataCell:newCell];
+    QSObjectCell *objectCell = [[QSObjectCell alloc] init];
+    if ([objectCell respondsToSelector:@selector(showsRichText)]) {
+        objectCell.showsRichText = YES;
+    }
+    [[pasteboardHistoryTable tableColumnWithIdentifier: @"object"] setDataCell:objectCell];
 
-    newCell = [[QSPasteboardAccessoryCell alloc] init];
+    NSCell *numberCell = [[QSPasteboardAccessoryCell alloc] init];
 
-    [[pasteboardHistoryTable tableColumnWithIdentifier: @"sequence"] setDataCell:newCell];
+    [[pasteboardHistoryTable tableColumnWithIdentifier: @"sequence"] setDataCell:numberCell];
 
 
     if ([pasteboardHistoryArray count]) {

@@ -30,9 +30,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <subviews>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="95" customClass="QSMenuButton">
-                                <rect key="frame" x="231" y="-1" width="22" height="22.5"/>
+                                <rect key="frame" x="234" y="-1" width="22" height="23"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" title="▼" bezelStyle="shadowlessSquare" image="gearshape.fill" catalog="system" imagePosition="leading" alignment="center" alternateImage="gearshape" inset="2" id="186">
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Button-GearMenu" imagePosition="leading" alignment="center" alternateImage="Button-GearMenu" imageScaling="proportionallyDown" inset="2" id="186">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
                                 </buttonCell>
@@ -96,7 +96,7 @@
                                     </connections>
                                 </tableView>
                             </subviews>
-                            <color key="backgroundColor" red="0.96370959" green="0.95328312999999998" blue="0.86656146999999994" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="backgroundColor"/>
                         </clipView>
                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" controlSize="small" horizontal="YES" id="193">
                             <rect key="frame" x="-100" y="-100" width="232" height="11"/>
@@ -182,7 +182,6 @@
         </menu>
     </objects>
     <resources>
-        <image name="gearshape" catalog="system" width="16" height="16"/>
-        <image name="gearshape.fill" catalog="system" width="16" height="16"/>
+        <image name="Button-GearMenu" width="128" height="128"/>
     </resources>
 </document>
