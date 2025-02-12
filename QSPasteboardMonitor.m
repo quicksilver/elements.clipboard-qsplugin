@@ -29,7 +29,7 @@
         return;
     }
     lastChangeCount = changeCount;
-    [[NSNotificationCenter defaultCenter] postNotificationName:QSPasteboardDidChangeNotification object:@{@"Pasteboard" : [NSPasteboard generalPasteboard], @"ActiveApp" : [[[NSWorkspace sharedWorkspace] activeApplication] objectForKey:@"NSApplicationBundleIdentifier"]}];
+	[[NSNotificationCenter defaultCenter] postNotificationName:QSPasteboardDidChangeNotification object:@{@"Pasteboard" : [NSPasteboard generalPasteboard], @"ActiveApp" : [[NSWorkspace sharedWorkspace] frontmostApplication].bundleIdentifier}];
 }
 
 
