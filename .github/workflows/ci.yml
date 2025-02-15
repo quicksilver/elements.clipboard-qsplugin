@@ -11,7 +11,7 @@ jobs:
       QS_BUILD_ONLY: 1
       QS_SOURCE_ROOT: "/tmp/git/quicksilver"
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         submodules: recursive
     - name: Build plugin
