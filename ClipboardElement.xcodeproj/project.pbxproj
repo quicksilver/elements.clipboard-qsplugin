@@ -123,7 +123,7 @@
 				DD92D38A0106425D02CA0E72 /* Cocoa.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		32DBCF9E0370C38000C91783 /* Classes */ = {
 			isa = PBXGroup;
@@ -162,8 +162,8 @@
 				14A8D33410CE6212003857E3 /* Release.xcconfig */,
 			);
 			name = Configuration;
-			path = /private/tmp/QS/Configuration;
-			sourceTree = "<absolute>";
+			path = ../Configuration;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXGroup section */
 
