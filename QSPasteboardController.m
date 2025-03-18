@@ -198,10 +198,8 @@
         [pasteboardStoreArray replaceObjectAtIndex:number withObject:[QSObject objectWithPasteboard:[NSPasteboard generalPasteboard]]];
         [pasteboardHistoryTable selectRowIndexes:rowSet byExtendingSelection:NO];
     } else {
-
         [pasteboardHistoryTable selectRowIndexes:rowSet byExtendingSelection:NO];
         [self pasteItem:self];
-        [pasteboardHistoryTable reloadData];
     }
 }
 
@@ -432,7 +430,6 @@
                 [pasteboardHistoryTable deselectRow:row];
         }
     }
-    [pasteboardHistoryTable reloadData];
     if (![[NSUserDefaults standardUserDefaults] boolForKey:kDiscardPasteboardHistoryOnQuit]) {
         
         [QSLib savePasteboardHistory];

@@ -12,6 +12,7 @@
 		1420687D10F980E2005ABCBC /* QSInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1420680B10F980C0005ABCBC /* QSInterface.framework */; };
 		1420687E10F980E2005ABCBC /* QSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 142067BB10F98097005ABCBC /* QSCore.framework */; };
 		8D1AC9700486D14A00FE50C9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD92D38A0106425D02CA0E72 /* Cocoa.framework */; };
+		CD7574FF2D8A0B8C00F18B8B /* QSReloadingDockingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = CD7574FE2D8A0B8C00F18B8B /* QSReloadingDockingWindow.m */; };
 		CD81DF931576D06800357E8B /* QSPasteboardPrefPane.m in Sources */ = {isa = PBXBuildFile; fileRef = E1DE246F072C6BF000D38731 /* QSPasteboardPrefPane.m */; };
 		CDA81DA7157D0B6000951D71 /* QSPasteboardPrefPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDA81DA6157D0B6000951D71 /* QSPasteboardPrefPane.xib */; };
 		CDA81DA9157D0CC800951D71 /* Pasteboard.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDA81DA8157D0CC800951D71 /* Pasteboard.xib */; };
@@ -39,6 +40,8 @@
 		32DBCF980370C29C00C91783 /* QSClipboardPlugIn_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSClipboardPlugIn_Prefix.pch; sourceTree = "<group>"; };
 		8D1AC9730486D14A00FE50C9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1AC9740486D14A00FE50C9 /* Clipboard Plugin.qsplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Clipboard Plugin.qsplugin"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD7574FD2D8A0B8C00F18B8B /* QSReloadingDockingWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QSReloadingDockingWindow.h; sourceTree = "<group>"; };
+		CD7574FE2D8A0B8C00F18B8B /* QSReloadingDockingWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QSReloadingDockingWindow.m; sourceTree = "<group>"; };
 		CDA81DA6157D0B6000951D71 /* QSPasteboardPrefPane.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QSPasteboardPrefPane.xib; sourceTree = "<group>"; };
 		CDA81DA8157D0CC800951D71 /* Pasteboard.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Pasteboard.xib; sourceTree = "<group>"; };
 		DD92D38A0106425D02CA0E72 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -140,6 +143,8 @@
 				E1DE246F072C6BF000D38731 /* QSPasteboardPrefPane.m */,
 				E1DE246E072C6BF000D38731 /* QSPasteboardProxyView.h */,
 				E1DE246D072C6BF000D38731 /* QSPasteboardProxyView.m */,
+				CD7574FD2D8A0B8C00F18B8B /* QSReloadingDockingWindow.h */,
+				CD7574FE2D8A0B8C00F18B8B /* QSReloadingDockingWindow.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -246,6 +251,7 @@
 				E1DE247F072C6BF000D38731 /* QSPasteboardMonitor.m in Sources */,
 				E1DE2481072C6BF000D38731 /* QSPasteboardController.m in Sources */,
 				E1DE250E072C734D00D38731 /* QSPasteboardAccessoryCell.m in Sources */,
+				CD7574FF2D8A0B8C00F18B8B /* QSReloadingDockingWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
