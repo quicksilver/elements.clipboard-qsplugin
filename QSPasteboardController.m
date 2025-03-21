@@ -430,6 +430,7 @@
                 [pasteboardHistoryTable deselectRow:row];
         }
     }
+    [pasteboardHistoryTable reloadData];
     if (![[NSUserDefaults standardUserDefaults] boolForKey:kDiscardPasteboardHistoryOnQuit]) {
         
         [QSLib savePasteboardHistory];
