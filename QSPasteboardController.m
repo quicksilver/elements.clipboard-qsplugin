@@ -225,9 +225,7 @@
 		case QSPasteboardHistoryMode:
 		case QSPasteboardStoreMode:
 			[self copyToClipboard:selectedObject];
-                if([[NSUserDefaults standardUserDefaults] boolForKey:@"QSPasteboard Paste on Selection"]) {
-				QSForcePaste();
-			}
+          QSForcePaste();
 			break;
 		case QSPasteboardQueueMode:
 		case QSPasteboardStackMode:
@@ -235,9 +233,7 @@
 				id object = (sender ? [pasteboardCacheArray objectAtIndex:0] : selectedObject);
 				supressCapture = YES;
 				[self copyToClipboard:object];
-				if([[NSUserDefaults standardUserDefaults] boolForKey:@"QSPasteboard Paste on Selection"]) {
 					QSForcePaste();
-				}
 				if (sender) {
 					[pasteboardCacheArray removeObjectAtIndex:0];
 					[pasteboardHistoryTable reloadData];
@@ -527,6 +523,7 @@
          chars]) {
         // switch between human numbering and machine numbering (0/1 start) so -1 from the chars integer value
         [self pasteNumber:[chars integerValue] - 1 plainText:([theEvent modifierFlags] & NSAlternateKeyMask)];
+        return;
     }
     else if ([chars characterAtIndex:0] == NSCarriageReturnCharacter || [chars characterAtIndex:0] == NSEnterCharacter) {
         [self pasteItem:self];

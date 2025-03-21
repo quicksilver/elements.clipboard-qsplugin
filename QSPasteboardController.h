@@ -33,7 +33,7 @@ typedef NS_ENUM(NSUInteger, QSPasteboardMode) {
     QSObjectView *pasteboardObjectView;
     BOOL supressCapture;
     BOOL adjustRowsToFit;
-	BOOL cacheIsReversed;
+    BOOL cacheIsReversed;
     BOOL asPlainText;
     NSInteger maxPasteboardCount;
     BOOL captureHistory;
