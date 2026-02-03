@@ -354,7 +354,8 @@
 	if (! [defaults boolForKey:kCapturePasteboardHistory]) return;
     
     // don't add the object to the clipboard if the user's whitelisted the app
-    if ([[defaults arrayForKey:@"clipboardIgnoreApps"] containsObject:[[notif object] objectForKey:@"ActiveApp"]]) {
+    id activeApp = [[notif object] objectForKey:@"ActiveApp"];
+    if (activeApp && [[defaults arrayForKey:@"clipboardIgnoreApps"] containsObject:activeApp]) {
         return;
     }
 
