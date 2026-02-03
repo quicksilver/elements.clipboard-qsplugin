@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.8.5</string>
+	<string>1.8.6</string>
 	<key>CFBundleVersion</key>
-	<string>169</string>
+	<string>170</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2022, QSApp</string>
 	<key>NSPrincipalClass</key>
