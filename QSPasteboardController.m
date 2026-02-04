@@ -118,6 +118,8 @@
 		pasteboardStoreArray = [[NSMutableArray alloc] init];
 		[self clearStore];
 		pasteboardCacheArray = [[NSMutableArray alloc] init];
+		asPlainText = NO;
+		supressCapture = NO;
 
 		// ***warning   * if pasteboard is empty, put last copyied item onto it
 
@@ -218,13 +220,13 @@
 	// ***warning   * the clipboard should be restored
 }
 
-
 - (IBAction)qsPaste:(id)sender {
 	QSObject *selectedObject = [self selectedObject];
 	switch (mode) {
 		case QSPasteboardHistoryMode:
 		case QSPasteboardStoreMode:
 			[self copyToClipboard:selectedObject];
+          [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.05]];
           QSForcePaste();
 			break;
 		case QSPasteboardQueueMode:
@@ -233,6 +235,7 @@
 				id object = (sender ? [pasteboardCacheArray objectAtIndex:0] : selectedObject);
 				supressCapture = YES;
 				[self copyToClipboard:object];
+				[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.05]];
 					QSForcePaste();
 				if (sender) {
 					[pasteboardCacheArray removeObjectAtIndex:0];
@@ -523,7 +526,7 @@
     if ([keys containsObject:
          chars]) {
         // switch between human numbering and machine numbering (0/1 start) so -1 from the chars integer value
-        [self pasteNumber:[chars integerValue] - 1 plainText:([theEvent modifierFlags] & NSAlternateKeyMask)];
+        [self pasteNumber:[chars integerValue] - 1 plainText:([theEvent modifierFlags] & NSEventModifierFlagOption)];
         return;
     }
     else if ([chars characterAtIndex:0] == NSCarriageReturnCharacter || [chars characterAtIndex:0] == NSEnterCharacter) {
